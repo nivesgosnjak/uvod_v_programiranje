@@ -7,7 +7,7 @@
 def vsota_stevk(n):
     if n==0:
         return 0
-    nov_n= (n -n%10)/10
+    nov_n= (n -n%10)//10
     return n%10 +vsota_stevk(nov_n)
 # =====================================================================@000957=
 # 2. podnaloga
@@ -16,7 +16,7 @@ def vsota_stevk(n):
 # funkcija vrne vsoto vseh števk števila `n`.
 # =============================================================================
 def vsota_vecjih_stevk(n, k=0):
-    nov_n= (n -n%10)/10
+    nov_n= (n -n%10)//10
     if n==0:
         return 0
     elif n%10>=k:
