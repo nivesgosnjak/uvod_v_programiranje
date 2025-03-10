@@ -14,7 +14,14 @@
 #     > Vnesi celo število: 10
 #     10
 # =============================================================================
-
+def preberi_celo_stevilo():
+    stevilo=input("Vnesi celo število: ")
+    if (stevilo.strip()).isalnum()==True:
+        return stevilo
+    else:
+        f"Žal \"{stevilo}\" ni celo število, poskusi ponovno!" 
+        
+        
 # =====================================================================@027497=
 # 2. podnaloga
 # S pomočjo prejšnje funkcije sestavi funkcijo `ugibaj`, ki sprejme pravilni

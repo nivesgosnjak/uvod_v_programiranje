@@ -59,8 +59,17 @@ def obrni_oklepaje(niz):
 #     >>> prestej_posebno("aa  a ", "a", 3)
 #     1
 # =============================================================================
-def prestej_posebno(niz,znak,stevilo):
-    return niz.count(" ", )
+def prestej_posebno(s,c,k):
+    if k>s.count(c):
+        return 0
+    elif k==0:
+        return len(s)-len(s.strip())
+    else:
+        a=int(s.index(c))
+        s1=s[a+1:]
+        k1=k-1
+        return prestej_posebno(s1,c,k1)
+
 
 
 

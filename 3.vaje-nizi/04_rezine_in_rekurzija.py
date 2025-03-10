@@ -10,7 +10,13 @@
 #     >>> filtriraj("Ne gremo še domov", "ngm")
 #     "N__g__m_______m__"
 # =============================================================================
-
+def filtriraj(s1,s2):
+    if s1=="":
+        return s1
+    elif (s1[0] in s2.upper()) or (s1[0] in s2.lower()):
+        return s1[0] + filtriraj(s1[1:],s2)
+    else:
+        return "_"+filtriraj(s1[1:],s2)
 # =====================================================================@027490=
 # 2. podnaloga
 # Sestavite funkcijo `pretvori`, ki sprejme niz in bazo ter vrne podano število
@@ -23,7 +29,14 @@
 #     >>> pretvori("2ACBD04", 36)
 #     4978911892
 # =============================================================================
-
+import string
+def pretvori(s,b):
+    niz="0123456789"+ string.ascii_uppercase
+    if s=="":
+        return 0
+    else:
+        return niz.index(s[0])*(b**(len(s)-1)) + pretvori(s[1:],b)
+    
 # =====================================================================@027489=
 # 3. podnaloga
 # Sestavite funkcijo `izbrisi_podvojene`, ki sprejme niz in odstrani vse
@@ -35,7 +48,14 @@
 #     >>> izbrisi_podvojene("abaab")
 #     "abb"
 # =============================================================================
-
+def izbrisi_podvojene(s):
+    if len(s)<=1:
+        return s
+    elif s[0]==s[1]:
+        s2=s.lstrip(s[0])
+        return izbrisi_podvojene(s2)
+    else:
+        return s[0]+izbrisi_podvojene(s[1:])
 # =====================================================================@027487=
 # 4. podnaloga
 # Sestavite funkcijo `vsak_k_ti`, ki sprejme niz in parameter `k` ter vrne nov
@@ -47,7 +67,11 @@
 #     >>> vsak_k_ti("abcdefghijk", 0)
 #     ""
 # =============================================================================
-
+def vsak_k_ti(s,k):
+    if k<=0:
+        return ""
+    else:
+        return s[::k]
 # =====================================================================@027488=
 # 5. podnaloga
 # Sestavitev funkcijo `zaporedje`, ki sprejme niz in vrne nov niz sestavljen iz
@@ -57,6 +81,14 @@
 #     >>> zaporedje("0123456789X")
 #     "0136X"
 # =============================================================================
+def zaporedje(s,n=0):
+    if len(s)==0:
+        return ""
+    elif len(s)<=n:
+        return ""
+    else:
+        return s[n] + zaporedje(s[n:],n+1)
+
 
 
 
