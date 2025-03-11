@@ -15,13 +15,12 @@
 #     10
 # =============================================================================
 def preberi_celo_stevilo():
-    stevilo=input("Vnesi celo število: ")
-    if (stevilo.strip()).isalnum()==True:
-        return stevilo
+    stevilo=input("> Vnesi celo število: ")
+    if stevilo.isdigit()==True or (stevilo[0]=="-" and stevilo[1:].isdigit==True):
+        return int(stevilo) 
     else:
-        f"Žal \"{stevilo}\" ni celo število, poskusi ponovno!" 
-        
-        
+        print (f'Žal \"{stevilo}\" ni celo število, poskusi ponovno!')
+        return preberi_celo_stevilo()
 # =====================================================================@027497=
 # 2. podnaloga
 # S pomočjo prejšnje funkcije sestavi funkcijo `ugibaj`, ki sprejme pravilni
