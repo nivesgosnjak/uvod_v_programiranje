@@ -16,11 +16,12 @@
 # =============================================================================
 def preberi_celo_stevilo():
     stevilo=input("> Vnesi celo število: ")
-    if stevilo.isdigit()==True or (stevilo[0]=="-" and stevilo[1:].isdigit==True):
-        return int(stevilo) 
+    if stevilo.isdigit()==True or (stevilo[0]=="-" and stevilo[1:].isdigit()==True):
+        return int(stevilo)
     else:
-        print (f'Žal \"{stevilo}\" ni celo število, poskusi ponovno!')
+        print("Žal \"",stevilo,"\" ni celo število, poskusi ponovno!",sep="")
         return preberi_celo_stevilo()
+
 # =====================================================================@027497=
 # 2. podnaloga
 # S pomočjo prejšnje funkcije sestavi funkcijo `ugibaj`, ki sprejme pravilni
@@ -42,7 +43,20 @@ def preberi_celo_stevilo():
 #     > Vnesi celo število: 20
 #     BRAVO! Res sem si zamislil število 20!
 # =============================================================================
-
+def ugibaj(a):
+    stevilo=input("> Vnesi celo število: ")
+    if stevilo.isnumeric()==True or (stevilo[0]=="-" and stevilo[1:].isdigit()==True):
+        if int(stevilo)>a:
+            print("Moje število je manjše!")
+            return ugibaj(a)
+        elif int(stevilo)<a:
+            print("Moje število je večje!")
+            return ugibaj(a)
+        else:
+            return print(f'BRAVO! Res sem si zamislil število {stevilo}!')
+    else:
+        print(f'Žal "{stevilo}" ni celo število, poskusi ponovno!')
+        return ugibaj(a)
 # =====================================================================@027623=
 # 3. podnaloga
 # Sestavite funkcijo `racunalnik_ugiba(spodnji, zgornji)`, ki z metodo bisekcije
@@ -76,7 +90,24 @@ def preberi_celo_stevilo():
 #     E/V/M> e
 #     Juhu, uganil sem! Zamislil si si število 12!
 # =============================================================================
-
+def racunalnik_ugiba(spodnji, zgornji):
+    if spodnji==zgornji:
+        return print(f'Juhu, uganil sem! Zamislil si si število {spodnji}!')
+    else:
+        sredina=(spodnji+zgornji)//2
+        print(f'Ali je tvoje število Enako/Večje/Manjše od {sredina}?')
+        evm=input("E/V/M> ")
+        if len(evm)==1 and evm in "evmEVM":
+            if evm in "eE":
+                return print(f'Juhu, uganil sem! Zamislil si si število {sredina}!')
+            elif evm in "mM":
+                return racunalnik_ugiba(spodnji,sredina-1)
+            else:
+                return racunalnik_ugiba(sredina+1,zgornji)
+        else:
+            print("Ali lahko daš normalen odgovor?")
+            return racunalnik_ugiba(spodnji,zgornji)
+    
 
 
 
