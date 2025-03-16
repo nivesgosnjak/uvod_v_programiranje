@@ -16,27 +16,52 @@
 # Sestavite funkcijo `naslednji_clen`, ki sprejme število in izračuna člen,
 # ki v Collatzovemu zaporedju sledi temu številu.
 # =============================================================================
-
+def naslednji_clen(n):
+    if n%2==0:
+        return n//2
+    else:
+        return n*3 +1
 
 # =====================================================================@000986=
 # 2. podnaloga
 # Sestavite funkcijo `dolzina_zaporedja`, ki sprejme število in izračuna 
 # dolžino Collatzovega zaporedja, ki se začne s tem številom.
 # =============================================================================
-
+def dolzina_zaporedja(n):
+    dolzina=1
+    while n !=1:
+        n= naslednji_clen(n)
+        dolzina += 1
+    return dolzina
 # =====================================================================@000987=
 # 3. podnaloga
 # Sestavite funkcijo `najvecji_clen`, ki sprejme število in izračuna največji 
 # člen v Collatzovem zaporedju, ki se začne s tem številom.
 # =============================================================================
-
+def najvecji_clen(n):
+    najvec=n
+    while n != 1:
+        n = naslednji_clen(n)
+        if n > najvec:
+            najvec = n
+        else:
+            pass
+    return najvec
 # =====================================================================@000988=
 # 4. podnaloga
 # Sestavite funkcijo `najdaljse_zaporedje(m, n)`, ki vrne dolžino najdaljšega
 # zaporedja med vsemi tistimi Collatzovimi zaporedji, ki se začnejo s števili
 # med (vključno) `m` in `n`.
 # =============================================================================
-
+def najdaljse_zaporedje(m, n):
+    najdaljse= dolzina_zaporedja(m)
+    while m<n:
+        m=m+1
+        if dolzina_zaporedja(m)>najdaljse:
+            najdaljse=dolzina_zaporedja(m)
+        else:
+            pass
+    return najdaljse
 
 
 

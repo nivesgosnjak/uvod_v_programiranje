@@ -70,7 +70,7 @@ def celostevilski(niz):
 #     ------+--+-+--+-++-+++-+-++-+++++--+--+++++-+-++-+-++-++-+---++-++--+-
 #     ------+--+-+--+-++-+++-+-++-+++++--+--+++++-+-++-+-++-++-+---++-++--+-
 # =============================================================================
-
+42
 # =====================================================================@009864=
 # 3. podnaloga
 # Sestavite funkcijo `ravninski`, ki sprejme niz, ki
@@ -111,6 +111,29 @@ def ravninski(niz):
 # na sever, dolg 5 korakov. Privzamete lahko, da zaporednih števk v
 # nizu ni, ter da se na ostale znake v nizu ne oziramo.
 # =============================================================================
+def hitri(tek):
+    prejsnji = 1
+    x=y=0
+    for znak in tek:
+        if znak in "0123456789":
+            prejsnji =int(znak)
+        elif znak.upper()=="S":
+            y += prejsnji
+            prejsnji = 1
+        elif znak.upper()=="J":
+            y += -prejsnji
+            prejsnji = 1
+        elif znak.upper()=="V":
+            x += prejsnji
+            prejsnji = 1
+        elif znak.upper()=="Z":
+            x += - prejsnji
+            prejsnji = 1
+        else:
+            pass
+    return (x,y)
+
+            
 
 
 

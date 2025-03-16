@@ -14,6 +14,19 @@
 #     >>> oklepaji('())(()')
 #     False
 # =============================================================================
+def oklepaji(niz):
+    razlika=0
+    while razlika>=0 and niz != "":
+        if niz[0]=="(":
+            razlika +=1
+            niz= niz[1:]
+        elif niz[0]==")":
+            razlika += -1
+            niz= niz[1:]
+        else:
+            niz = niz[1:]
+    return razlika == 0
+    
 
 
 
