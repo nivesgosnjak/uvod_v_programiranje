@@ -11,13 +11,23 @@
 #     >>> identiteta(3)
 #     [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 # =============================================================================
+def identiteta(n):
+    matrika=[]
+    for i in range(n):
+        vrstica=(i)*[0] + [1] + (n-i-1)*[0]
+        matrika.append(vrstica)
+    return matrika
 
 # =====================================================================@020211=
 # 2. podnaloga
 # Sestavite funkcijo `sled_matrike`, ki izračuna sled oz. vsoto diagonalnih
 # elementov matrike.
 # =============================================================================
-
+def sled_matrike(matrika):
+    sled =0
+    for n in range(len(matrika)):
+        sled += matrika[n][n]
+    return sled
 # =====================================================================@013396=
 # 3. podnaloga
 # Sestavite funkcijo `transponiraj`, ki sestavi in vrne novo matriko in sicer
@@ -26,6 +36,15 @@
 #     >>> transponiraj([[1, 2], [3, 4]])
 #     [[1, 3], [2, 4]]
 # =============================================================================
+def transponiraj(matrika):
+    trans=[]
+    for i in range(len(matrika[0])):
+        vrstica=[]
+        for j in range(len(matrika)):
+            vrstica.append(matrika[j][i])
+        trans.append(vrstica)
+    return trans
+    
 
 # =====================================================================@013397=
 # 4. podnaloga
@@ -35,7 +54,14 @@
 #     >>> uporabi([[1, 3], [2, 4]], [5, 6])
 #     [23, 34]
 # =============================================================================
-
+def uporabi(mat, vec):
+    x=[]
+    for n in range(len(mat)):
+        skalar=0
+        for i in range(len(mat[n])):
+            skalar+=mat[n][i] * vec[i]
+        x.append(skalar)
+    return x
 # =====================================================================@020276=
 # 5. podnaloga
 # Sestavite funkcijo `sestej`, ki sprejme dve matriki in sestavi ter vrne novo
@@ -44,7 +70,14 @@
 #     >>> sestej([[1, 0], [0, 1]], [[0, 2], [0, 0]])
 #     [[1, 2], [0, 1]]
 # =============================================================================
-
+def sestej(mat1,mat2):
+    vsota=[]
+    for n in range(len(mat1)):
+        vrstica=[]
+        for i in range(len(mat1[n])):
+            vrstica.append(mat1[n][i]+mat2[n][i])
+        vsota.append(vrstica)
+    return vsota
 
 
 

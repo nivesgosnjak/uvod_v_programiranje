@@ -15,7 +15,8 @@
 #     >>> naivna_resitev("([})")
 #     False
 # =============================================================================
-
+def naivna_resitev(niz):
+    return niz.count(")")==niz.count("(") and niz.count("[")==niz.count("]") and niz.count("{")==niz.count("}")
 # =====================================================================@013394=
 # 2. podnaloga
 # Sestavite funkcijo `gnezdeni_oklepaji`, ki bo preverila, ali so v danem nizu
@@ -34,7 +35,21 @@
 # uklepajem na koncu seznama. V tem primeru zadnji element pomožnega seznama
 # odstranimo. Na koncu mora biti pomožni seznam prazen.
 # =============================================================================
-
+def gnezdeni_oklepaji(niz):
+    pomozni=[]
+    for n in range(len(niz)):
+        if niz[n] == "(":
+            pomozni.append(")")
+        elif niz[n]=="{":
+            pomozni.append("}")
+        elif niz[n]=="[":
+            pomozni.append("]")
+        elif niz[n] in ")]}":
+            if len(pomozni)==0 or pomozni[-1] != niz[n]:
+                return False
+            else:
+                del pomozni[-1] 
+    return pomozni==[]
 
 
 
