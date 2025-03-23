@@ -9,14 +9,22 @@
 # `(x0, y0)` leži v vsaj enem krogu v seznamu `krogi`, in `False`
 # sicer.
 # =============================================================================
-
+def v_uniji(x0, y0, krogi):
+    for n in range(len(krogi)):
+        if (x0 - krogi[n][0])**2 + (y0 -krogi[n][1])**2 <= (krogi[n][2])**2:
+            return True
+    return False
 # =====================================================================@001312=
 # 2. podnaloga
 # Sestavite funkcijo `v_preseku(x, y, krogi)`, ki vrne `True`, če točka
 # `(x, y)` leži v vseh krogih v danem seznamu `krogi`, in `False`
 # sicer.
 # =============================================================================
-
+def v_preseku(x, y, krogi):
+    for n in range(len(krogi)):
+        if (x - krogi[n][0])**2 + (y -krogi[n][1])**2 > (krogi[n][2])**2:
+            return False
+    return True
 # =====================================================================@001313=
 # 3. podnaloga
 # Sestavite funkcijo `pravokotnik(krogi)`, ki poišče najmanjši pravokotnik,
