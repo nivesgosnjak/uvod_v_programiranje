@@ -18,7 +18,11 @@
 #     >>> je_permutacija([7, 3, 4, 5, 2, 6, 1])
 #     True
 # =============================================================================
-
+def je_permutacija(sez):
+    for n in range(1,len(sez)+1):
+        if n not in sez:
+            return False
+    return True
 # =====================================================================@013405=
 # 2. podnaloga
 # Sestavite funkcijo `je_seznam_ciklov`, ki sprejme seznam seznamov in preveri,
@@ -31,7 +35,15 @@
 #     >>> je_seznam_ciklov([[8,1,4],[5,7,1]])
 #     False
 # =============================================================================
-
+def je_seznam_ciklov(sez):
+    porabljeni=[]
+    for n in range(len(sez)):
+        for i in range(len(sez[n])):
+            if sez[n][i] < 1 or (sez[n][i] in porabljeni):
+                return False
+            else:
+                porabljeni.append(sez[n][i])
+    return True
 # =====================================================================@013406=
 # 3. podnaloga
 # Sestavite funkcijo `urejeni_cikli`, ki seznam ciklov pretvori v nov seznam

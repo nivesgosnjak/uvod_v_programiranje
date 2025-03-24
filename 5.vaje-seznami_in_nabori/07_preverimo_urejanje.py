@@ -35,6 +35,12 @@ def pripravi_primer(sez1,sez2):
 #     >>> pravilno_urejen([(5, 0), ('minut', 1), ('mi', 2), ('daj', 3), ('cas', 4), ('da', 5), ('te', 6), ('zapeljem', 7)])
 #     True
 # =============================================================================
+def pravilno_urejen(seznam):
+    for n in range(len(seznam)):
+        if n!=seznam[n][1]:
+            return False
+    return True
+
 
 
 
