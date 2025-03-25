@@ -54,6 +54,47 @@ def je_seznam_ciklov(sez):
 #     >>> urejeni_cikli([[7, 3], [4], [5, 2, 1]])
 #     [[1, 5, 2], [3, 7]]
 # =============================================================================
+def brisi_kratke_cikle(sez):
+    if all(isinstance(x,int) for x in sez)==True:
+        return sez
+    else:
+        n=0
+        while n < len(sez):
+            if len(sez[n]) < 2:
+                del sez[n]
+            else:
+                n=n+1
+        return sez
+    
+def uredi_seznam_ciklov(sez):
+    urejen=[]
+    while len(sez)>0:
+        urejen.append(min(sez))
+        del sez[sez.index(min(sez))]
+    return urejen
+
+def uredi_en_cikel(sez):
+    if sez==[]:
+        return sez
+    else:
+        if sez[0]==min(sez):
+            return sez
+        else:
+            nov_seznam=sez[1:]
+            nov_seznam.append(sez[0])
+            return uredi_en_cikel(nov_seznam)
+        
+def urejeni_cikli(sez):
+    sez=brisi_kratke_cikle(sez)
+    if all(isinstance(x,int) for x in sez)==True:
+        return uredi_en_cikel(sez)
+    else:
+        for n in range(len(sez)):
+            sez[n]=uredi_en_cikel(sez[n])
+        sez=uredi_seznam_ciklov(sez)
+        return sez
+
+
 
 # =====================================================================@013407=
 # 4. podnaloga
@@ -67,6 +108,16 @@ def je_seznam_ciklov(sez):
 #     >>> iz_ciklov([[7, 3], [4], [5, 2, 1]], 9)
 #     [5, 1, 7, 4, 2, 6, 3, 8, 9]
 # =============================================================================
+def iz_ciklov(cikli, dolzina=0):
+    for cikel in cikli:
+        dolzina=max(dolzina,max(cikel))
+    zacetni=[]
+    for i in range(1, dolzina +1):
+        zacetni.append(i)
+    for cikel in cikli:
+        for m in range(len(cikel)-1):
+            zacetni[cikel[m]-1],zacetni[cikel[m+1]-1]=zacetni[cikel[m+1]-1], zacetni[cikel[m]-1]
+    return zacetni
 
 # =====================================================================@013408=
 # 5. podnaloga
@@ -76,6 +127,20 @@ def je_seznam_ciklov(sez):
 #     >>> v_cikle([5, 1, 7, 4, 2, 6, 3])
 #     [[1, 5, 2], [3, 7]]
 # =============================================================================
+def v_cikle(per):
+    cikli=[]
+    uporabljeni=[]
+    for n in per:
+        cikel=[]
+        if n not in uporabljeni:
+            cikel.append(n)
+            uporabljeni.append(n)
+            while per[n-1] not in uporabljeni:
+                cikel.append(per[n-1])
+                uporabljeni.append(per[n-1])
+                n=per[n-1]
+        cikli.append(cikel)
+    return urejeni_cikli(cikli)
 
 # =====================================================================@013409=
 # 6. podnaloga
@@ -85,6 +150,14 @@ def je_seznam_ciklov(sez):
 #     >>> inverz_perm([7, 3, 4, 5, 2, 1, 6])
 #     [6, 5, 2, 3, 4, 7, 1]
 # =============================================================================
+def inverz_perm(perm):
+    cikli=v_cikle(perm)
+    if cikli==[]:
+        return perm
+    else:
+        inverz=iz_ciklov(inverz_cikli(cikli))
+    return inverz
+    
 
 # =====================================================================@013410=
 # 7. podnaloga
@@ -95,7 +168,12 @@ def je_seznam_ciklov(sez):
 #     >>> inverz_cikli([[7, 3], [4], [5, 2, 1]])
 #     [[1, 2, 5], [3, 7]]
 # =============================================================================
-
+def inverz_cikli(cikli):
+    inverz=[]
+    for cikel in cikli:
+        cikel.reverse()
+        inverz.append(cikel)
+    return urejeni_cikli(inverz)
 # =====================================================================@013411=
 # 8. podnaloga
 # Sestavite funkcijo `ciklicni_tip(cikli, dolzina)`, ki vrne ciklični tip
@@ -111,6 +189,25 @@ def je_seznam_ciklov(sez):
 #     >>> ciklicni_tip([[7, 3], [4], [5, 2, 1]], 9)
 #     (4, 1, 1)
 # =============================================================================
+def ciklicni_tip(cikli, dolzina=0):
+    cikli=urejeni_cikli(cikli)
+    a=1
+    for cikel in cikli:
+        dolzina=max(dolzina,max(cikel))
+    for cikel in cikli:
+        a=max(a,len(cikel))
+    skupaj=0
+    for cikel in cikli:
+        skupaj += len(cikel)
+    nov_sez=[]
+    for cikel in cikli:
+        nov_sez.append(len(cikel))
+    koncni=[dolzina-skupaj]
+    while a>1:
+        b=nov_sez.count(a)
+        koncni.append(b)
+        a=a-1
+    return tuple(koncni)
 
 # =====================================================================@013412=
 # 9. podnaloga
@@ -127,6 +224,20 @@ def je_seznam_ciklov(sez):
 #     >>> red([[7, 3], [4], [5, 2, 1]])
 #     6
 # =============================================================================
+def gcd(a,b):
+    if max(a,b)%min(a,b)==0:
+        return min(a,b)
+    return gcd(min(a,b),max(a,b)%min(a,b))
+
+def red(cikli):
+    dolzine=[]
+    for cikel in cikli:
+        dolzine.append(len(cikel))
+    while len(dolzine)>1:
+        lcm=(dolzine[0]*dolzine[1])//gcd(dolzine[0],dolzine[1])
+        del dolzine[0]
+        dolzine[0]=lcm
+    return lcm
 
 
 
