@@ -39,7 +39,13 @@ def slike(permutacija, x, n):
 #     >>> cikel({1: 3, 2: 2, 3: 1}, 2)
 #     [2]
 # =============================================================================
-
+def cikel(permutacija, x):
+    a=permutacija[x]
+    n=0
+    while a!=x:
+        n +=1
+        a=permutacija[a]
+    return slike(permutacija,x,n)
 
 # =====================================================================@001382=
 # 4. podnaloga
@@ -50,7 +56,20 @@ def slike(permutacija, x, n):
 #     >>> cikli({1: 3, 2: 2, 3: 1})
 #     [[1, 3], [2]]
 # =============================================================================
-
+def cikli(perm):
+    neurejeno=[]
+    porabljeni=[]
+    for kljuc in perm:
+        if kljuc not in porabljeni:
+            neurejeno.append(cikel(perm,kljuc))
+            porabljeni= porabljeni + cikel(perm,kljuc)
+    resitev=[]
+    for c in neurejeno:
+        i=c.index(min(c))
+        c= c[i:] + c[:i]
+        resitev.append(c)
+    resitev.sort
+    return resitev
 # =====================================================================@001383=
 # 5. podnaloga
 # Sestavite funkcijo `je_permutacija`, ki vrne `True`, če dani slovar
@@ -61,7 +80,8 @@ def slike(permutacija, x, n):
 #     >>> je_permutacija({1: 3, 2: 4})
 #     False
 # =============================================================================
-
+def je_permutacija(permutacija):
+    return set(permutacija.keys())==set(permutacija.values()) and len(permutacija)==max(set(permutacija.keys()))
 
 
 

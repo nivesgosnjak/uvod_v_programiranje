@@ -20,13 +20,22 @@
 # Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
 # _množico_ tistih, ki ljubijo same sebe.
 # =============================================================================
-
+def narcisoidi(slovar):
+    narcisi=set()
+    for oseba in slovar:
+        if oseba in slovar[oseba]:
+            narcisi.add(oseba)
+    return narcisi
 # =====================================================================@001385=
 # 2. podnaloga
 # Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
 # _množico_ tistih, ki so ljubljeni.
 # =============================================================================
-
+def ljubljeni(slovar):
+    srcki=set()
+    for oseba in slovar:
+        srcki = srcki.union(slovar[oseba])
+    return srcki
 # =====================================================================@001386=
 # 3. podnaloga
 # Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
@@ -34,6 +43,15 @@
 # sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
 # Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
 # =============================================================================
+def pari(slovar):
+    srecnezi=set()
+    for oseba in slovar:
+        for srce in slovar[oseba]:
+            if oseba in slovar[srce]:
+                parcek= [oseba,srce]
+                parcek.sort()
+                srecnezi.add(tuple(parcek))
+    return srecnezi
 
 # =====================================================================@001387=
 # 4. podnaloga
