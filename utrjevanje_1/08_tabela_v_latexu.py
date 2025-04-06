@@ -1,92 +1,79 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
+# Tabela v LaTeXu
 #
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
+# Tekač Marko ima v datoteki `tekaski_podatki.txt` spravljene podatke o
+# svojih tekaških podvigih. Datoteka izgleda takole:
 # 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
+#     09-04-2017,10,53
+#     10-04-2017,12,1:01
+#     12-04-2017,14,1:16
+#     13-04-2017,8,39
 # 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# V prvem stolpcu je shranjen podatek o datumu teka, drugi stopec vsebuje
+# število pretečenih kilometrov, v tretjem stopcu pa je spravljen podatek
+# o tem, koliko časa je tek vzel.
+# =====================================================================@009974=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Sestavite funkcijo `preberi_podatke(datoteka)`, ki prebere datoteko s podatki
+# o teku in vrne slovar. Ključi naj bodo datumi tekov, vrednosti pa nabori,
+# ki vsebujejo par `(dolzina, cas)`. Pri tem naj bo `cas` izražen v minutah.
+# 
+#     >>> preberi_podatke("tekaski_podatki.txt")
+#     {'09-04-2017': (10.0, 53), '13-04-2017': (8.0, 39), '12-04-2017': (14.0, 76), '10-04-2017': (12.0, 61)}
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# =====================================================================@009975=
+# 2. podnaloga
+# Sestavite funkcijo `povprecna_hitrost(dolzina, cas)`, ki ob dani pretečeni
+# dolžini in času vrne povprečno hitrost teka, zaokroženo na dve decimalki.
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> povprecna_hitrost(10.0, 53)
+#     0.19
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+
+# =====================================================================@009976=
+# 3. podnaloga
+# Sestavite funkcijo `pretvori_v_latex(vhod, izhod)`, ki prebere dano vhodno
+# datoteko s podatki o teku in ustvari novo izhodno datoteko, ki izgleda takole:
+# 
+#     \documentclass[a4paper, 12pt]{amsart}
+#     \usepackage[utf8]{inputenc}
+#     \usepackage[slovene]{babel}
+#     \usepackage{lmodern}
+#     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#     \pagestyle{empty}
+#     \pagenumbering{gobble}
+#     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#     \usepackage{booktabs}
+#     \usepackage{longtable}
+#     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#     \title{Marko te\v{c}e, Marko te\v{c}e}
+#     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#     \begin{document}
+#     \maketitle
+# 
+# 
+#     \begin{longtable}[c]{cccc}
+#     \toprule
+#     {\em Datum      } &
+#     {\em Razdalja   } &
+#     {\em Čas        } &
+#     {\em Hitrost    }
+#     \\ \midrule \endhead
+# 
+#     09. 04. 2017 & 10.0 & 53 & 0.19 \\
+#     10. 04. 2017 & 12.0 & 61 & 0.20 \\
+#     12. 04. 2017 & 14.0 & 76 & 0.18 \\
+#     13. 04. 2017 & 8.0 & 39 & 0.21 \\
+# 
+#     \bottomrule
+#     \end{longtable}
+# 
+#     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#     \end{document}
+# =============================================================================
+
+
 
 
 
@@ -703,20 +690,15 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0Ijo5OTc0LCJ1c2VyIjoxMDY3Nn0:1u1SqN:vdegVmQi-36tXi4N7LdjY-k7-snpdC3Mh-DulRKC0-o"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            test_cases = [
+                ("tekaski_podatki.txt", ["09-04-2017,10,53", "10-04-2017,12,1:01", "12-04-2017,14,1:16", "13-04-2017,8,39"], {'09-04-2017': (10.0, 53), '13-04-2017': (8.0, 39), '12-04-2017': (14.0, 76), '10-04-2017': (12.0, 61)})
+            ]
+            for filename, lines, result in test_cases:
+                with Check.in_file(filename, lines, encoding='utf-8'):
+                    if not Check.equal('preberi_podatke("{0}")'.format(filename), result):
+                        break  # test had failed
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +710,9 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0Ijo5OTc1LCJ1c2VyIjoxMDY3Nn0:1u1SqN:b7c8o0BA1JVH8MjP_WrfhD5HWFviNVK7RVSL1qnIQVE"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            Check.equal('povprecna_hitrost(10.0, 53)', 0.19)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,49 +724,52 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0Ijo5OTc2LCJ1c2VyIjoxMDY3Nn0:1u1SqN:QE-LyldaBXNJijOURmniOt5ZSAXgVSum15_RHoc1taU"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
-        try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            result = r"""
+            \documentclass[a4paper, 12pt]{amsart}
+            \usepackage[utf8]{inputenc}
+            \usepackage[slovene]{babel}
+            \usepackage{lmodern}
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \pagestyle{empty}
+            \pagenumbering{gobble}
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \usepackage{booktabs}
+            \usepackage{longtable}
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \title{Marko te\v{c}e, Marko te\v{c}e}
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \begin{document}
+            \maketitle
+            
+            
+            \begin{longtable}[c]{cccc}
+            \toprule
+            {\em Datum      } &
+            {\em Razdalja   } &
+            {\em Čas        } &
+            {\em Hitrost    }
+            \\ \midrule \endhead
+            
+            09. 04. 2017 & 10.0 & 53 & 0.19 \\
+            10. 04. 2017 & 12.0 & 61 & 0.20 \\
+            12. 04. 2017 & 14.0 & 76 & 0.18 \\
+            13. 04. 2017 & 8.0 & 39 & 0.21 \\
+            
+            \bottomrule
+            \end{longtable}
+            
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            \end{document}"""
+            result = "\n".join([vrstica.strip() for vrstica in result.split("\n")])
+            
+            for filename, lines, _ in test_cases:
+                with Check.in_file(filename, lines, encoding='utf-8'):
+                    pretvori_v_latex(filename, filename + ".out")
+                    if not Check.out_file(filename + ".out", result.split("\n"), encoding="utf-8"):
+                        napaka = True
+                        break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

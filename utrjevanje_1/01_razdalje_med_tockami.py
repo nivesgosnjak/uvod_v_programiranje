@@ -1,92 +1,35 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
-#
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# Razdalje med točkami
+# =====================================================================@027816=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Sestavite funkcijo `ravninska_razdalja(x1, y1, x2, y2)`, ki vrne
+# razdaljo med točkama (`x1`, `y1`) in (`x2`, `y2`).
+# 
+#     >>> ravninska_razdalja(1, 2, 3, 4)
+#     2.82842712475
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
+import math
+def ravninska_razdalja(x1, y1, x2, y2):
+    return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# =====================================================================@027817=
+# 2. podnaloga
+# Sestavite funkcijo `polarna_razdalja(r1, fi1, r2, fi2)`, ki vrne
+# razdaljo med točkama (`r1`, `fi1`) in (`r2`, `fi2`) v ravnini, pri
+# čemer so koordinate v polarnem zapisu, koti pa so izraženi v stopinjah.
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> polarna_razdalja(1, 30, 4, 90)
+#     3.60555127546
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+def polarna_razdalja(r1, fi1, r2, fi2):
+    fi1= fi1 * math.pi / 180
+    fi2= fi2 * math.pi /180
+    x1=r1*math.cos(fi1)
+    y1=r1*math.sin(fi1)
+    x2=r2*math.cos(fi2)
+    y2=r2*math.sin(fi2)
+    return ravninska_razdalja(x1, y1, x2, y2)
+
 
 
 
@@ -703,20 +646,12 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoyNzgxNiwidXNlciI6MTA2NzZ9:1u1SqN:Gfs6eQyf7IVGOSVPIGXqFPkHZx--q3n8oZvEQ5rir4I"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            Check.equal('ravninska_razdalja(1, 2, 3, 4)', 2 ** (3 / 2))
+            Check.equal('ravninska_razdalja(0, 0, 3, 4)', 5)
+            for i in range(100):
+                Check.secret(ravninska_razdalja(i - 50, i % 17, i % 13, i ** (1 / 2)))
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,74 +663,12 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoyNzgxNywidXNlciI6MTA2NzZ9:1u1SqN:l7vBwswwFOKHfOnAdKfoaUq_Bbp1jWpWvefpWbSiCWg"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
-        try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
-        try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            Check.equal('polarna_razdalja(1, 30, 4, 90)', 13 ** (1 / 2))
+            Check.equal('polarna_razdalja(1, 0, 1, 90)', 2 ** (1 / 2))
+            for i in range(100):
+                Check.secret(polarna_razdalja(i - 50, i % 17, i % 13, i ** (1 / 2)))
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

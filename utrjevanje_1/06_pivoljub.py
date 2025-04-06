@@ -1,92 +1,94 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
+# Pivoljub
 #
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
+# Jure in Veno sta študenta, ki rada pijeta pivo. Sestavila sta seznam njunih
+# priljubljenih znamk. Podatke sta zbrala v seznam, ki vsebuje peterice: ime,
+# stopnja alkohola, država izvora, cena, stil.
 # 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# Ker sta preveč alhokolizirana, da bi lahko analizirala podatke, potrebujeta
+# vašo pomoč. Pomagajta jima sestaviti funkcije, ki jima bodo v pomoč pri
+# analizi piva.
+# =====================================================================@021012=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Sestavite funkcijo `slovar_cen(seznam)`, ki prejme seznam peteric s
+# podatki in vrne slovar. Ta naj kot ključe vsebuje imena, njihove vrednosti
+# pa naj bodo cene. Primer:
+# 
+#     >>> l = [('Brewdog Candy Kaiser', 5.2, 'Škotska', 2.16, 'Altbier'),
+#     ... ('Carniola ESB', 5.2, 'Slovenija', 2.60, 'ESB'),
+#     ... ('Blanche De Bruxelles', 4.5, 'Belgija', 1.72, 'Belgian White'),
+#     ... ('Bernard Bohemian Ale 16', 8.2, 'Češka', 2.20, 'Belgian Strong Ale')]
+#     >>> slovar_cen(l)
+#     {'Bernard Bohemian Ale 16': 2.2, 'Blanche De Bruxelles': 1.72,
+#      'Carniola ESB': 2.6, 'Brewdog Candy Kaiser': 2.16}
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# =====================================================================@021013=
+# 2. podnaloga
+# Sestavite funkcijo `izvor_in_znamka(seznam)`, ki prejme seznam peteric s
+# podatki in vrne slovar, katerega ključi so države izvora, vrednosti pa
+# slovarji, ki imajo za ključe ime piva, vrednosti pripadajočih ključev pa
+# so pari števil in sicer najprej cena, nato pa stopnja alkohola. Primer:
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> l = [('1910 Double Stout', 7.4, 'Anglija', 3.50, 'Foreign Stout'),
+#     ... ('Viven Imperial IPA', 8.0, 'Belgija', 3.09, 'Imperial IPA'),
+#     ... ('Blanche De Bruxelles', 4.5, 'Belgija', 1.72, 'Belgian White'),
+#     ... ('Banana Bread Beer', 5.2, 'Anglija', 2.27, 'English Strong Ale')]
+#     >>> izvor_in_znamka(l)
+#     {'Belgija': {'Viven Imperial IPA': (3.09, 8.0), 'Blanche De Bruxelles': (1.72, 4.5)},
+#      'Anglija': {'1910 Double Stout': (3.5, 7.4), 'Banana Bread Beer': (2.27, 5.2)}}
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+
+# =====================================================================@021014=
+# 3. podnaloga
+# Jureta in Vena zanima, katera piva so najmočnejša. Podatke želita spraviti
+# v datoteko v obliki preglednice. Vsako pivo naj ima svojo vrstico v datoteki.
+# Vrstica naj vsebuje ime piva, državo izvora in stopnjo alkohola. Podatki naj
+# bodo med seboj ločeni s presledki, država izvora pa naj bo zapisana v oklepajih.
+# Piva naj bodo urejena padajoče glede na stopnjo alkohola, tista z enako stopnjo
+# alhohola pa še padajoče po imenih (glejte tudi spodnji zgled).
+# 
+# Sestavite funkcijo `zapisi_podatke(ime_datoteke, slovar)`, ki dobi niz z imenom
+# datoteke in slovar, ki je v takšni obliki, kot ga vrne funkcija `izvor_in_znamka`.
+# Primer: Po klicu
+# 
+#     >>> s = {'Belgija': {'Viven Imperial IPA': (3.09, 8.0), 'Blanche De Bruxelles': (1.72, 4.5)},
+#     ... 'Anglija': {'1910 Double Stout': (3.5, 7.4), 'Banana Bread Beer': (2.27, 5.2)}}
+#     >>> zapisi_podatke('dobra_piva.txt', s)
+# 
+# naj bo v datoteki `dobra_piva.txt` naslednje besedilo:
+# 
+#     Viven Imperial IPA (Belgija) 8.0
+#     1910 Double Stout (Anglija) 7.4
+#     Banana Bread Beer (Anglija) 5.2
+#     Blanche De Bruxelles (Belgija) 4.5
+# =============================================================================
+
+# =====================================================================@021015=
+# 4. podnaloga
+# Jure in Veno rada pijeta pivo v družbi prijateljev. Zanima ju, kateri
+# prijatelji so dragi in kateri so poceni (tj. koliko je vrednost piva, ki
+# ga spijejo).
+# 
+# Sestavite funkcijo `zapitek(prijatelji, pivo)`, ki dobi dva slovarja. Slovar
+# `prijatelji` naj kot ključe vsebuje imena njunih prijateljev, pripadajoče
+# vrednosti pa so seznami z imeni piv, ki so jih le-ti spili. Slovar `pivo`
+# naj bo v takšni obliki, kot ga vrne funkcija `slovar_cen`. Funkcija naj
+# vrne slovar, katerega ključi so imena prijateljev, pripadajoče vrednosti pa
+# naj bodo skupni zneski piv, ki so jih spili. Če za katerega od prijateljev
+# ni mogoče ugotoviti, koliko je spil, naj bo pripadajoča vrednost `None`.
+# Primer:
+# 
+#     >>> pivo = {'Bernard Bohemian Ale 16': 2.2, 'Blanche De Bruxelles': 1.72,
+#     ... 'Carniola ESB': 2.6, 'Brewdog Candy Kaiser': 2.16}
+#     >>> prijatelji = {'Jure': ['Bernard Bohemian Ale 16', 'Blanche De Bruxelles'],
+#     ... 'Nino': ['Carniola ESB', 'Carniola ESB', 'Carniola ESB', 'Carniola ESB'],
+#     ... 'Ines': ['Blanche De Bruxelles', 'Laško'], 'Anja': []}
+#     >>> zapitek(prijatelji, pivo)
+#     {'Anja': 0.0, 'Nino': 10.4, 'Jure': 3.92, 'Ines': None}
+# =============================================================================
+
+
 
 
 
@@ -703,20 +705,14 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoyMTAxMiwidXNlciI6MTA2NzZ9:1u1SqN:7ti1Z9hDXLyitPPk1zioVI-JX0eJrzzZCB_64nSSMq4"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            Check.equal("""slovar_cen([('Brewdog Candy Kaiser', 5.2, 'Škotska', 2.16, 'Altbier'),
+                ('Carniola ESB', 5.2, 'Slovenija', 2.60, 'ESB'),
+                ('Blanche De Bruxelles', 4.5, 'Belgija', 1.72, 'Belgian White'),
+                ('Bernard Bohemian Ale 16', 8.2, 'Češka', 2.20, 'Belgian Strong Ale')])""",
+                {'Bernard Bohemian Ale 16': 2.2, 'Blanche De Bruxelles': 1.72,
+                 'Carniola ESB': 2.6, 'Brewdog Candy Kaiser': 2.16})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +724,14 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoyMTAxMywidXNlciI6MTA2NzZ9:1u1SqN:y8BoZWdtuPOaWG-uFNP1bMp7D3GbxvUz9Qenj3aCyFw"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            Check.equal("""izvor_in_znamka([('1910 Double Stout', 7.4, 'Anglija', 3.50, 'Foreign Stout'),
+                ('Viven Imperial IPA', 8.0, 'Belgija', 3.09, 'Imperial IPA'),
+                ('Blanche De Bruxelles', 4.5, 'Belgija', 1.72, 'Belgian White'),
+                ('Banana Bread Beer', 5.2, 'Anglija', 2.27, 'English Strong Ale')])""",
+                {'Belgija': {'Viven Imperial IPA': (3.09, 8.0), 'Blanche De Bruxelles': (1.72, 4.5)},
+                 'Anglija': {'1910 Double Stout': (3.5, 7.4), 'Banana Bread Beer': (2.27, 5.2)}})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,20 +743,19 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0IjoyMTAxNCwidXNlciI6MTA2NzZ9:1u1SqN:HiOX1E_qsIxbkEN9vNZ5fMPpUhoaurAn12X6_Rbu9sU"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
+            test_cases = [
+                ({'Belgija': {'Viven Imperial IPA': (3.09, 8.0), 'Blanche De Bruxelles': (1.72, 4.5)},
+                  'Anglija': {'1910 Double Stout': (3.5, 7.4), 'Banana Bread Beer': (2.27, 5.2)}},
+                 'dobra_piva_1.txt',
+                 ["Viven Imperial IPA (Belgija) 8.0", "1910 Double Stout (Anglija) 7.4",
+                  "Banana Bread Beer (Anglija) 5.2", "Blanche De Bruxelles (Belgija) 4.5"]),
+            ]
+            for slovar, f_name, izhod in test_cases:
+                zapisi_podatke(f_name, slovar)
+                if not Check.out_file(f_name, izhod, encoding='utf-8'):
+                    break  # Test has failed.
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -778,24 +767,21 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
+        ] = "eyJwYXJ0IjoyMTAxNSwidXNlciI6MTA2NzZ9:1u1SqN:UxwL8xmpX3jykhA7Te2f5RQ9nyL1mDS07aDsNzk5wp4"
         try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            Check.equal("""zapitek({'Jure': ['Bernard Bohemian Ale 16', 'Blanche De Bruxelles'],
+                'Nino': ['Carniola ESB', 'Carniola ESB', 'Carniola ESB', 'Carniola ESB'],
+                'Ines': ['Blanche De Bruxelles', 'Laško'], 'Anja': []},
+                {'Bernard Bohemian Ale 16': 2.2, 'Blanche De Bruxelles': 1.72,
+                'Carniola ESB': 2.6, 'Brewdog Candy Kaiser': 2.16})""",
+                {'Anja': 0.0, 'Nino': 10.4, 'Jure': 3.92, 'Ines': None})
+            
+            Check.equal("""zapitek({'Jure': ['Bernard Bohemian Ale 16', 'Blanche De Bruxelles'],
+                'Nino': ['Carniola ESB', 'Carniola ESB', 'Carniola ESB', 'Carniola ESB'],
+                'Ines': ['Blanche De Bruxelles', 'Laško', 'Brewdog Candy Kaiser'], 'Anja': []},
+                {'Bernard Bohemian Ale 16': 2.2, 'Blanche De Bruxelles': 1.72,
+                'Carniola ESB': 2.6, 'Brewdog Candy Kaiser': 2.16})""",
+                {'Anja': 0.0, 'Nino': 10.4, 'Jure': 3.92, 'Ines': None})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

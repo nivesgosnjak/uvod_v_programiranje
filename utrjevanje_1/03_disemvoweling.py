@@ -1,92 +1,105 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
+# Disemvoweling
 #
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
+# Matej je moderator na nekem manj znanem forumu, ki ima kar lepo število
+# registriranih uporabnikov, vendar večina med njimi piše same neumnosti.
+# Med takimi je še posebno dejaven Tomaž Majer. Če se zdi Mateju objava
+# žaljiva, jo nemudoma zbriše. Če objava na forumu ni žaljiva, ampak je le
+# precej neumna, pa naredi naslednje: Vse samoglasnike odstrani iz besedila
+# in jih (v enakem vrstnem redu) doda nazaj na konec. Na primer sporočilo:
 # 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
+#     Banana je najboljša! Izjemno dobra je tudi v kombinaciji z Nutelo!
 # 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# postane
+# 
+#     Bnn j njbljš! zjmn dbr j td v kmbncj z Ntl!aaaeaoaIeooaeuioiaiiueo
+# 
+# Takó besedilo postane težko berljivo in večina bralcev ga ignorira. Če
+# pa se najde kdo, ki ga vsebina resnično zanima, lahko z nekaj truda
+# razvozla vsebino sporočila.
+# 
+# (Opisana transformacija besedila je znana pod imenom disemvoweling.)
+# =====================================================================@024225=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Napišite funkcijo `prvi_samoglasnik(niz)`, ki kot argument dobi niz `niz`
+# in vrne položaj (indeks) prvega samoglasnika v danem nizu. Če v nizu ni
+# samoglasnika, vrni -1
+# 
+#     >>> prvi_samoglasnik('Krščen matiček!')
+#     4
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
+def prvi_samoglasnik(niz):
+    niz=niz.upper()
+    a=niz.find("A")
+    e=niz.find("E")
+    i=niz.find("I")
+    o=niz.find("O")
+    u=niz.find("U")
+    if a+e+i+o+u==-5:
+        return -1
+    crke=[a,e,i,o,u]
+    odstrani=[]
+    for crka in crke:
+        if crka==-1:
+            odstrani.append(crka)
+    for crka in odstrani:
+        crke.remove(crka)
+    return min(crke)
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+
+# =====================================================================@024226=
+# 2. podnaloga
+# Napišite funkcijo `disemvowel(sporocilo)`, ki kot argument prejme niz
+# `sporocilo`. Funkcija naj sestavi in vrne nov niz, ki ga dobi iz niza
+# `sporocilo` tako, da vse samoglasnike prestavi na konec niza.
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> disemvowel('Banana je dobra!')
+#     'Bnn j dbr!aaaeoa'
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+def disemvowel(sporocilo):
+    if prvi_samoglasnik(sporocilo)==-1:
+        return sporocilo
+    i= prvi_samoglasnik(sporocilo)
+    samoglasniki=""
+    while i!=-1:
+        samoglasniki=samoglasniki + sporocilo[i]
+        sporocilo=sporocilo[:i] + sporocilo[i+1:]
+        i= prvi_samoglasnik(sporocilo)
+    return sporocilo + samoglasniki
+
+
+
+# =====================================================================@024227=
+# 3. podnaloga
+# Včasih pa želimo sporočilo dešifrirati, saj nas zanima njegova vsebina.
+# Ta naloga je vse prej kot enostavna, saj ne vemo kam točno je treba vriniti
+# izgnane samoglasnike. Sporočilo `'Bnn j dbr!aaaeoa'` bi lahko dešifrirali
+# tudi kot `'Banna ja debora!'`, kot `'Bnana aje dobar!'` ipd.
+# 
+# Matej je na mesta v besedilu, kjer predvideva, da bi morali stati
+# samoglasniki, vstavil znake `'*'` (zvezdica). V sporočilu zvezdica nikoli
+# ne bo imela drugega pomena. Prav tako bo število samoglasnikov enako številu
+# zvezdic in vsi samoglasniki bodo na koncu niza.
+# 
+# Napišite funkcijo `razveljavi_disemvowel(niz)`, ki bo zvezdice v nizu
+# nadomestila s samoglasniki, ki se v nizu `niz` nahajajo na koncu. Zgled:
+# 
+#     >>> razveljavi_disemvowel('B*n*n* j* d*br*!aaaeoa')
+#     'Banana je dobra!'
+# =============================================================================
+def razveljavi_disemvowel(niz):
+    i= prvi_samoglasnik(niz)
+    if i==-1:
+        return niz
+    samoglasniki=niz[i:]
+    ostalo=niz[:i]
+    for j in range(len(ostalo)):
+        if ostalo[j]=="*":
+            ostalo=ostalo[:j] + samoglasniki[0] + ostalo[j+1:]
+            samoglasniki=samoglasniki[1:]
+    return ostalo
+
+
 
 
 
@@ -703,20 +716,14 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoyNDIyNSwidXNlciI6MTA2NzZ9:1u1SqN:RYF0FrIIwJcKr_BWt7hHi1F4hrPexGMKqijbg6Vs_ho"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            Check.equal("prvi_samoglasnik('Krščen matiček!')", 4)
+            Check.equal("prvi_samoglasnik('Danes je lep dan!')", 1)
+            Check.equal("prvi_samoglasnik('Prvi, drugi in tretji.')", 3)
+            Check.equal("prvi_samoglasnik('Apel in čevljar')", 0)
+            Check.equal("prvi_samoglasnik('')", -1)
+            Check.equal("prvi_samoglasnik('čmrlj')", -1)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +735,14 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoyNDIyNiwidXNlciI6MTA2NzZ9:1u1SqN:t5C1xVWEReOhJJTqJUCkB3WyjPxfKRHN-u3iprYXJkw"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            Check.equal("disemvowel('Čmrlj šc!')", 'Čmrlj šc!')
+            Check.equal("disemvowel('Banana je dobra!')", 'Bnn j dbr!aaaeoa')
+            Check.equal("disemvowel('Pred njo s kopiti čevljarček se ustavi;')", 'Prd nj s kpt čvljrčk s stv;eooiieaeeuai')
+            Check.equal("disemvowel('puškomitraljez')", 'pškmtrljzuoiae')
+            Check.equal("disemvowel('Bnn j dbr!aaaeoa')", 'Bnn j dbr!aaaeoa')
+            Check.equal("disemvowel('3.141592653589793')", '3.141592653589793')
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,49 +754,14 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0IjoyNDIyNywidXNlciI6MTA2NzZ9:1u1SqN:cWGq_bNSgtenLvHgZysp7BOx2C8SRVl_SBafBWofym8"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
-        try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            Check.equal("razveljavi_disemvowel('B*n*n* j* d*br*!aaaeoa')", 'Banana je dobra!')
+            Check.equal("razveljavi_disemvowel('Čmrlj šc!')", 'Čmrlj šc!')
+            Check.equal("razveljavi_disemvowel('Pr*d nj* s k*p*t* č*vlj*rč*k s* *st*v*;eooiieaeeuai')", 'Pred njo s kopiti čevljarček se ustavi;')
+            Check.equal("razveljavi_disemvowel('p*šk*m*tr*lj*zuoiae')", 'puškomitraljez')
+            Check.equal("razveljavi_disemvowel('Bnn j dbr!******aaaeoa')", 'Bnn j dbr!aaaeoa')
+            Check.equal("razveljavi_disemvowel('3.141592653589793')", '3.141592653589793')
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

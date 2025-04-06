@@ -1,92 +1,63 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
-#
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# Vsote
+# =====================================================================@001474=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Sestavite funkcijo `vsota_kvadratov(n)`, ki izračuna in vrne vsoto
+# $1^2 + 2^2 + 3^2 + \ldots + n^2$. Primer:
+# 
+#     >>> vsota_kvadratov(10)
+#     385
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
+def vsota_kvadratov(n):
+    vsota=0
+    for i in range(n+1):
+        vsota += i**2
+    return vsota
+# =====================================================================@001475=
 # 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
+# Sestavite funkcijo `vsota_produktov_sosednjih(n)`, ki izračuna in vrne vsoto
+# $1 \cdot 2 + 2 \cdot 3 + 3 \cdot 4 + \ldots + n \cdot (n + 1)$. Primer:
+# 
+#     >>> vsota_produktov_sosednjih(10)
+#     440
 # =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
+def vsota_produktov_sosednjih(n):
+    vsota=0
+    for i in range(n + 1):
+        vsota += i*(i+1)
+    return vsota
+# =====================================================================@001476=
 # 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
+# Sestavite funkcijo `stevilo_clenov(m)`, ki izračuna, največ koliko členov
+# vsote $1 \cdot 2 + 2 \cdot 3 + 3 \cdot 4 + \ldots + n \cdot (n + 1) + \ldots$
+# lahko seštejemo, da bo dobljena vsota še vedno manjša ali enaka `m`.
+# Primer:
+# 
+#     >>> stevilo_clenov(20)
+#     3
 # =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
-
-# =====================================================================@001387=
+def stevilo_clenov(m):
+    vsota=0
+    i=0
+    if m<0:
+        return 0
+    while vsota<=m:
+        vsota += i*(i+1)
+        i +=1
+    return i -2
+# =====================================================================@001477=
 # 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# Sestavite funkcijo `najblizje(a, b, m)`, ki poišče takšno število `k`
+# med `a` in `b`, pri katerem se z eno od delnih vsot
+# $k \cdot (k+1) + (k+1) \cdot (k+2) + (k+2) \cdot (k+3) + \ldots$
+# najbolj približamo številu `m`. Če je takšnih števil več, naj funkcija
+# vrne najmanjšega. Primer:
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> najblizje(10, 20, 10000)
+#     14
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+
+
 
 
 
@@ -703,20 +674,18 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoxNDc0LCJ1c2VyIjoxMDY3Nn0:1u1SqN:O7cwXYW3Vj1cfRQHqrOAM4_zVIzMK8vEXP4yGqoTDFg"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            test_data = [
+                ("""vsota_kvadratov(1)""", 1),
+                ("""vsota_kvadratov(3)""", 14),
+                ("""vsota_kvadratov(10)""", 385),
+                ("""vsota_kvadratov(15)""", 1240),
+                ("""vsota_kvadratov(100)""", 338350),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +697,18 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoxNDc1LCJ1c2VyIjoxMDY3Nn0:1u1SqN:cBXoOn_r_hzzzH0u-LFmtddZXrBgURB5GzNMPSVO3sM"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            test_data = [
+                ("""vsota_produktov_sosednjih(1)""", 2),
+                ("""vsota_produktov_sosednjih(3)""", 20),
+                ("""vsota_produktov_sosednjih(10)""", 440),
+                ("""vsota_produktov_sosednjih(20)""", 3080),
+                ("""vsota_produktov_sosednjih(100)""", 343400),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,20 +720,20 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0IjoxNDc2LCJ1c2VyIjoxMDY3Nn0:1u1SqN:SlIlpXscSRaaGGVGGOUu7-lO-eGVQn_7YHY4SfBx33U"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
+            test_data = [
+                ("""stevilo_clenov(2)""", 1),
+                ("""stevilo_clenov(19)""", 2),
+                ("""stevilo_clenov(20)""", 3),
+                ("""stevilo_clenov(1)""", 0),
+                ("""stevilo_clenov(-20)""", 0),
+                ("""stevilo_clenov(3079)""", 19),
+                ("""stevilo_clenov(3080)""", 20),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -778,24 +745,17 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
+        ] = "eyJwYXJ0IjoxNDc3LCJ1c2VyIjoxMDY3Nn0:1u1SqN:gsN_pWFuIuFtCIB_9WGw94W7N4O04Fou4zbGY75XoCs"
         try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            test_data = [
+                ("""najblizje(10, 20, 10000)""", 14),
+                ("""najblizje(20, 30, 10000)""", 21),
+                ("""najblizje(30, 40, 10000)""", 38),
+                ("""najblizje(1, 40, 10000)""", 14),
+            ]
+            for td in test_data:
+                if not Check.equal(*td):
+                    break
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

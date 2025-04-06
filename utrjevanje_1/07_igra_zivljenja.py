@@ -1,92 +1,103 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
+# Igra življenja
 #
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
+# [Igra življenja](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+# gre takole: Imamo matriko, katere elementi sta logični vrednosti `True`
+# in `False`. Vrednost `True` pomeni, da je celica živa, vrednost `False`
+# pa pomeni, da je celica mrtva. Celice (razen robnih) imajo po 8 sosedov:
+# dva horizontalna, dve vertikalna in štiri diagonalne. Čas teče v
+# diskretnih korakih. S trenutnim stanjem sveta je tudi stanje sveta
+# v naslednjem koraku natanko določeno in sicer po naslednjih pravilih:
 # 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
+# - Živa celica, ki ima manj kot 2 živa soseda, umre (zaradi osamljenosti).
+# - Živa celica, ki ima 2 ali 3 žive sosede, preživi.
+# - Živa celica, ki ima več kot 3 žive sosede, umre (zaradi prenaseljenosti).
+# - Mrtva celica, ki ima natanko 3 žive sosede, oživi (reprodukcija).
 # 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# Primeri matrik, ki predstavljajo stanje sveta:
+# 
+#     svet_1 = [
+#         [False, False, False, False, False, False],
+#         [False, False, False, True, False, False],
+#         [False, True, False, False, True, False],
+#         [False, True, False, False, True, False],
+#         [False, False, True, False, False, False],
+#         [False, False, False, False, False, False]
+#     ]
+# 
+#     svet_2 = [
+#         [False, False, False, False],
+#         [False, True, True, False],
+#         [False, True, True, False],
+#         [False, False, False, False]
+#     ]
+# 
+# Tukaj si lahko ogledate 
+# [simulacijo](http://pmav.eu/stuff/javascript-game-of-life-v3.1.1/).
+# =====================================================================@027813=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Napišite funkcijo `zivi(svet, i, j)`, ki v svetu `svet` prešteje in
+# vrne število živih sosedov celice v $i$-ti vrstici in $j$-tem stolpcu.
+# Zgled (naj bo `svet_1` matrika, kot je definirana zgoraj):
+# 
+#     >>> zivi(svet_1, 2, 0)
+#     2
+# 
+# _Opomba_: Kot je za Python običajno, se stolpci in vrstice začnejo
+# številčiti pri 0.
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# =====================================================================@027814=
+# 2. podnaloga
+# Napišite funkcijo `igra(svet)`, ki sestavi in vrne matriko, ki
+# predstavlja novo stanje sveta. Štiri pravila, ki določajo novo stanje
+# sveta, so opisana zgoraj.
 # 
-# Na primer, če imamo slovar
+# Zgled (matrika `svet_1` naj bo enaka kot zgoraj):
 # 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> igra(svet_1)
+#     [[False, False, False, False, False, False],
+#      [False, False, False, False, False, False],
+#      [False, False, True, True, True, False],
+#      [False, True, True, True, False, False],
+#      [False, False, False, False, False, False],
+#      [False, False, False, False, False, False]]
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+
+# =====================================================================@027815=
+# 3. podnaloga
+# Napišite funkcijo `populacija(svet, n)`, ki naredi `n` korakov igre
+# življenje in na vsakem koraku prešteje število živih celic. Ta
+# števila naj vrne v obliki seznama, ki ima $n + 1$ elementov – prvo
+# število v seznamu naj bo število živih celic v začetnem svetu. Zgled
+# (matrika `svet_1` naj bo enaka kot zgoraj):
+# 
+#     >>> populacija(svet_1, 3)
+#     [6, 6, 6, 6]
+# 
+# Funkcijo bomo testirali še na naslednjih svetovih (poleg tistih dveh,
+# ki sta podana zgoraj):
+# 
+#     svet_3 = [
+#         [False, False, False, False, False, False],
+#         [False, True, True, False, False, False],
+#         [False, True, True, False, False, False],
+#         [False, False, False, True, True, False],
+#         [False, False, False, True, True, False],
+#         [False, False, False, False, False, False]
+#     ]
+# 
+#     svet_4 = [
+#         [True, True, True],
+#         [True, True, True],
+#         [True, True, True]
+#     ]
+# 
+# _Nasvet_: Najprej napišite pomožno funkcijo, ki prešteje število živih
+# celic v matriki.
+# =============================================================================
+
+
 
 
 
@@ -703,20 +714,21 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoyNzgxMywidXNlciI6MTA2NzZ9:1u1SqN:bkDTxG1JajMxiVOnOn4RtcqXWAGvJgXOfKtG5Nkhp6g"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            svet_1 = [
+                [False, False, False, False, False, False],
+                [False, False, False, True, False, False],
+                [False, True, False, False, True, False],
+                [False, True, False, False, True, False],
+                [False, False, True, False, False, False],
+                [False, False, False, False, False, False]
+            ]
+            Check.equal("""zivi(svet_1, 5, 5)""", 0, env={'svet_1': svet_1})
+            Check.equal("""zivi(svet_1, 2, 0)""", 2, env={'svet_1': svet_1})
+            Check.equal("""zivi(svet_1, 3, 1)""", 2, env={'svet_1': svet_1})
+            Check.equal("""zivi(svet_1, 3, 3)""", 3, env={'svet_1': svet_1})
+            Check.equal("""zivi(svet_1, 3, 4)""", 1, env={'svet_1': svet_1})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +740,33 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoyNzgxNCwidXNlciI6MTA2NzZ9:1u1SqN:e3vNUwk09Ujm73e-5cymDF0qLE1RTi_hDTOjCj82kzw"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            svet_1 = [
+                [False, False, False, False, False, False],
+                [False, False, False, True, False, False],
+                [False, True, False, False, True, False],
+                [False, True, False, False, True, False],
+                [False, False, True, False, False, False],
+                [False, False, False, False, False, False]
+            ]
+            vse_ok = Check.equal("""igra(svet_1)""", [
+                [False, False, False, False, False, False],
+                [False, False, False, False, False, False],
+                [False, False, True, True, True, False],
+                [False, True, True, True, False, False],
+                [False, False, False, False, False, False],
+                [False, False, False, False, False, False]], env={'svet_1': svet_1})
+            if vse_ok:
+                vse_ok = Check.equal("""igra(igra(svet_1))""", svet_1, env={'svet_1': svet_1})
+            svet_2 = [
+                [False, False, False, False],
+                [False, True, True, False],
+                [False, True, True, False],
+                [False, False, False, False]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal("""igra(svet_2)""", svet_2, env={'svet_2': svet_2})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,49 +778,44 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0IjoyNzgxNSwidXNlciI6MTA2NzZ9:1u1SqN:EQSA1l-Ju0U6PwHKEL4uXVrBzu58aAPTP6whztdRq24"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
-        except TimeoutError:
-            Check.error("Dovoljen čas izvajanja presežen")
-        except Exception:
-            Check.error(
-                "Testi sprožijo izjemo\n  {0}",
-                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
-            )
-
-    if Check.part():
-        Check.current_part[
-            "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
-        try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            svet_1 = [
+                [False, False, False, False, False, False],
+                [False, False, False, True, False, False],
+                [False, True, False, False, True, False],
+                [False, True, False, False, True, False],
+                [False, False, True, False, False, False],
+                [False, False, False, False, False, False]
+            ]
+            vse_ok = Check.equal("""populacija(svet_1, 3)""", [6, 6, 6, 6], env={'svet_1': svet_1})
+            svet_2 = [
+                [False, False, False, False],
+                [False, True, True, False],
+                [False, True, True, False],
+                [False, False, False, False]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal("""populacija(svet_2, 0)""", [4], env={'svet_2': svet_2})
+            if vse_ok:
+                vse_ok = Check.equal("""populacija(svet_2, 5)""", [4, 4, 4, 4, 4, 4], env={'svet_2': svet_2})
+            svet_3 = [
+                [False, False, False, False, False, False],
+                [False, True, True, False, False, False],
+                [False, True, True, False, False, False],
+                [False, False, False, True, True, False],
+                [False, False, False, True, True, False],
+                [False, False, False, False, False, False]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal("""populacija(svet_3, 5)""", [8, 6, 8, 6, 8, 6], env={'svet_3': svet_3})
+            svet_4 = [
+                [True, True, True],
+                [True, True, True],
+                [True, True, True]
+            ]
+            if vse_ok:
+                vse_ok = Check.equal("""populacija(svet_4, 5)""", [9, 4, 0, 0, 0, 0], env={'svet_4': svet_4})
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

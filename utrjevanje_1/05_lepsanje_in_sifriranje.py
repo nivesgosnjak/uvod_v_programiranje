@@ -1,92 +1,97 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
+# Lepšanje in šifriranje
 #
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# [Klodovik /papiga/](http://skab612.com/AlanFord/af_likovi.html) in ne
+# [Klodvik /frankofonski kralj/](https://sl.wikipedia.org/wiki/Seznam_frankovskih_kraljev)
+# bi rad zašifriral svoja besedila, da jih nepoklicane osebe
+# ne bodo mogle prebrati.
+# =====================================================================@001492=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# To stori tako, da najprej v besedilu vse male črke spremeni v velike in
+# odstrani vse znake, ki niso črke. (Klodovik vsa pomembna besedila piše v
+# angleščini. Uporabljali bomo angleško abecedo.) Na primer iz besedila
+# `'Attack at dawn!'` dobi besedilo `'ATTACKATDAWN'`. Nato ga zapiše cik-cak
+# v treh vrsticah, kot prikazuje primer:
+# 
+#     A...C...D...
+#     .T.A.K.T.A.N
+#     ..T...A...W.
+# 
+# Sestavite funkcijo `cik_cak`, ki sprejme niz in  vrne trojico nizov
+# (torej `tuple`) in sicer prvo, drugo in tretjo vrstico v tem zapisu. Primer:
+# 
+#     >>> cik_cak('Attack at dawn!')
+#     ('A...C...D...', '.T.A.K.T.A.N', '..T...A...W.')
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# =====================================================================@001493=
+# 2. podnaloga
+# Zašifrirano besedilo dobi tako, da najprej prepiše vse znake iz prve
+# vrstice, nato vse znake iz druge vrstice in na koncu še vse znake iz
+# tretje vrstice. V zgornjem primeru bi tako dobil `'ACDTAKTANTAW'`.
+# Sestavite funkcijo `cik_cak_sifra`, ki dobi kot argument niz
+# in vrne zašifrirano besedilo. Primer:
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+#     >>> cik_cak_sifra('Attack at dawn!')
+#     'ACDTAKTANTAW'
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+
+# =====================================================================@001494=
+# 3. podnaloga
+# Klodovik se zelo razjezi, ko dobi elektronsko pošto v takšni obliki:
+# 
+#     Kar sva  si obljubljala    že leta,  si   želiva potrditi tudi   pred prijatelji in   celo
+#     žlahto. Vabiva te na
+#     
+#          poročno slovesnost,        ki bo
+#        10.   maja 2016 ob    15.    uri na gradu Otočec.   Prijetno   druženje bomo 
+#     nadaljevali v    hotelu   Mons.   Tjaša in  Pavle
+# 
+# Nepopisno mu gre na živce, da je med besedami po več presledkov. Še
+# bolj pa ga nervira, ker so nekatere vrstice precej daljše od drugih.
+# Ker je Klodovik vaš dober prijatelj, mu boste pomagali in napisali
+# funkcije, s katerimi bo lahko olepšal besedila.
+# 
+# 
+# Najprej napišite funkcijo `razrez`, ki kot argument dobi niz in vrne
+# seznam besed v tem nizu. Besede so med seboj ločene z enim ali večimi
+# praznimi znaki: `' '` (presledek), `'\t'` (tabulator) in `'\n'` (skok
+# v novo vrstico). Pri tej nalogi ločilo obravnavamo kot del besede.
+# Primer:
+# 
+#     >>> razrez('   Kakšen\t pastir, \n\ntakšna  čreda. ')
+#     ['Kakšen', 'pastir,', 'takšna', 'čreda.']
+# =============================================================================
+
+# =====================================================================@001495=
+# 4. podnaloga
+# Sedaj, ko že imate funkcijo `razrez`, bo lažje napisati tisto funckijo, ki
+# jo Klodovik zares potrebuje. To je
+# funkcija `olepsanoBesedilo(s, sir)`, ki kot argumenta dobi niz
+# `s` in naravno število `sir`. Funkcija vrne olepšano besedilo, kar
+# pomeni naslednje:
+# 
+# * Funkcija naj odstrani odvečne prazne znake.
+# * Vsaka vrstica naj bo kar se le da dolga.
+# * Nobena vrstica naj ne vsebuje več kot `sir` znakov (pri čemer znaka
+#   `'\n'` na koncu vrstice ne štejemo).
+# * Besede znotraj iste vrstice naj bodo ločene s po enim presledkom
+#   (ne glede na to, s katerimi in koliko praznimi znaki so ločene v
+#   originalnem besedilu).
+# 
+# Predpostavite, da dolžina nobene besede ni več kot `sir` in da je niz
+# `s` neprazen. Primer:
+# 
+#     >>> s2 = olepsanoBesedilo('  Jasno in   svetlo \t\tna sveti \t\n\nvečer,  dobre\t\t letine je dost, če pa je\t  oblačno in   temno,        žita ne bo.', 20)
+#     >>> print(s2)
+#     Jasno in svetlo na
+#     sveti večer, dobre
+#     letine je dost, če
+#     pa je oblačno in
+#     temno, žita ne bo.
+# =============================================================================
+
+
 
 
 
@@ -703,20 +708,10 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoxNDkyLCJ1c2VyIjoxMDY3Nn0:1u1SqN:9ctb-iyQeCkobpJOWe9qxiKoCseBCqJXPcZgU8cWwS8"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            Check.equal("""cik_cak('Attack at dawn!')""", ('A...C...D...', '.T.A.K.T.A.N', '..T...A...W.'))
+            Check.equal("""cik_cak('We are discovered. Flee at once!')""", ('W...E...C...R...L...T...E', '.E.R.D.S.O.E.E.F.E.A.O.C.', '..A...I...V...D...E...N..'))
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +723,10 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoxNDkzLCJ1c2VyIjoxMDY3Nn0:1u1SqN:kRzM0NB4ksq3-8YthzPtl9XnLXciCUrwlQNveGYK-8I"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            Check.equal("""cik_cak_sifra('Attack at dawn!')""", 'ACDTAKTANTAW')
+            Check.equal("""cik_cak_sifra('We are discovered. Flee at once!')""", 'WECRLTEERDSOEEFEAOCAIVDEN')
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,20 +738,34 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0IjoxNDk0LCJ1c2VyIjoxMDY3Nn0:1u1SqN:nI5OvxLM7K7hsFrUsXqiaGLCkVQtg82WkOC90qJQfuA"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
+            Check.equal("""razrez('Osamelec')""",
+                        ['Osamelec'])
+            Check.equal("""razrez('Dve besedi')""",
+                        ['Dve', 'besedi'])
+            Check.equal("""razrez('Dve        besedi')""",
+                        ['Dve', 'besedi'])
+            Check.equal("""razrez('    Dve besedi')""",
+                        ['Dve', 'besedi'])
+            Check.equal("""razrez('Dve besedi         ')""",
+                        ['Dve', 'besedi'])
+            Check.equal("""razrez(' Dve  besedi ')""",
+                        ['Dve', 'besedi'])
+            Check.equal("""razrez('\\n\\n\\nDve\\n besedi\t ')""",
+                        ['Dve', 'besedi'])
+            Check.equal("""razrez('N\\na\\nv\\np\\ni\\nk')""",
+                        ['N', 'a', 'v', 'p', 'i', 'k'])
+            Check.equal("""razrez('N\\na\\n             v\\np\\ni\\nk')""",
+                        ['N', 'a', 'v', 'p', 'i', 'k'])
+            Check.equal("""razrez('   Kakšen\\t pastir, \\n\\ntakšna  čreda. ')""",
+                        ['Kakšen', 'pastir,', 'takšna', 'čreda.'])
+            Check.equal("""razrez('Drevo se po sadu spozna.')""",
+                        ['Drevo', 'se', 'po', 'sadu', 'spozna.'])
+            Check.equal("""razrez('    Drevo se    po sadu    spozna.    ')""",
+                        ['Drevo', 'se', 'po', 'sadu', 'spozna.'])
+            Check.equal("""razrez('\\t\\nDrevo \\t\\tse\\t\\tpo\\n\\nsadu spozna.\\n\\n')""",
+                        ['Drevo', 'se', 'po', 'sadu', 'spozna.'])
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -778,24 +777,34 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
+        ] = "eyJwYXJ0IjoxNDk1LCJ1c2VyIjoxMDY3Nn0:1u1SqN:U1mfh8OaXGPT-OQQuLSbtqbd7GFNCswskpC9O1O-uOA"
         try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            Check.equal("""olepsanoBesedilo('Dve besedi', 6)""",
+                        'Dve\nbesedi')
+            Check.equal("""olepsanoBesedilo('Dve besedi', 16)""",
+                        'Dve besedi')
+            Check.equal("""olepsanoBesedilo('\\nDve                besedi   \\t  ', 16)""",
+                        'Dve besedi')
+            Check.equal("""olepsanoBesedilo('   Dve besedi', 100)""",
+                        'Dve besedi')
+            Check.equal("""olepsanoBesedilo('N\\na\\nv\\np\\ni\\nk', 3)""",
+                        'N a\nv p\ni k')
+            Check.equal("""olepsanoBesedilo('N\\na\\nv\\np\\ni\\nk', 6)""",
+                        'N a v\np i k')
+            Check.equal("""olepsanoBesedilo('N\\na\\nv\\np\\ni\\nk', 5)""",
+                        'N a v\np i k')
+            Check.equal("""olepsanoBesedilo('N\\na\\nv\\np\\ni', 5)""",
+                        'N a v\np i')
+            Check.equal("""olepsanoBesedilo('N\\na\\nv\\np\\ni', 6)""",
+                        'N a v\np i')
+            Check.equal("""olepsanoBesedilo('  Jasno in   svetlo \\t\\tna sveti \\t\\n\\nvečer,  dobre\\t\\t letine je dost, če pa je\\t  oblačno in   temno,        žita ne bo.', 20)""",
+                        'Jasno in svetlo na\nsveti večer, dobre\nletine je dost, če\npa je oblačno in\ntemno, žita ne bo.')
+            Check.equal("""olepsanoBesedilo('  Jasno in   svetlo \\t\\tna sveti \\t\\n\\nvečer,  dobre\\t\\t letine je dost, če pa je\\t  oblačno in   temno,        žita ne bo.', 7)""",
+                        'Jasno\nin\nsvetlo\nna\nsveti\nvečer,\ndobre\nletine\nje\ndost,\nče pa\nje\noblačno\nin\ntemno,\nžita ne\nbo.')
+            Check.equal("""olepsanoBesedilo('  Jasno in   svetlo \\t\\tna sveti \\t\\n\\nvečer,  dobre\\t\\t letine je dost, če pa je\\t  oblačno in   temno,        žita ne bo.', 30)""",
+                        'Jasno in svetlo na sveti\nvečer, dobre letine je dost,\nče pa je oblačno in temno,\nžita ne bo.')
+            Check.equal("""olepsanoBesedilo('  Jasno in   svetlo \\t\\tna sveti \\t\\n\\nvečer,  dobre\\t\\t letine je dost, če pa je\\t  oblačno in   temno,        žita ne bo.', 45)""",
+                        'Jasno in svetlo na sveti večer, dobre letine\nje dost, če pa je oblačno in temno, žita ne\nbo.')
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:

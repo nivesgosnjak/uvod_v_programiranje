@@ -1,92 +1,122 @@
 # =============================================================================
-# Ljubezen nam je vsem v pogubo
+# Poker
 #
-# Socialno omrežje zaljubljenosti podamo s slovarjem, ki ime osebe preslika v
-# množico vseh, v katere je oseba zaljubljena (ena oseba je lahko zaljubljena v
-# več oseb). Na primer, slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': set(),
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# nam pove, da je Ana zaljubljena v Bineta in Ceneta, Bine ni zaljubljen, Cene
-# ljubi Bineta, Davorka samo sebe in Eva Bineta.
-# =====================================================================@001384=
+# Pri podnalogah, kjer je prisotna (psevdo)naključnost, pravilnosti rešitev
+# ni mogoče povsem preveriti, zato bo tam Tomo morda zadovoljen tudi z
+# rešitvami, ki niso povsem pravilne. Seveda pa lahko svoje rešitve primerjate
+# z uradnimi.
+# =====================================================================@024228=
 # 1. podnaloga
-# Sestavite funkcijo `narcisoidi`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki ljubijo same sebe.
+# Definirajte funkcijo `nov_kup()`, ki naj vrne seznam, ki
+# predstavlja klasičen kup kart.
+# Vsaka karta naj bo predstavljena kot par `(višina, barva)`. Tako
+# na primer `(12, "pik")` predstavlja pikovo damo,
+# `(10, "križ")` pa križevo desetko.
 # =============================================================================
-def narcisoidi(slovar):
-    narcisi=set()
-    for oseba in slovar:
-        if oseba in slovar[oseba]:
-            narcisi.add(oseba)
-    return narcisi
-# =====================================================================@001385=
-# 2. podnaloga
-# Sestavite funkcijo `ljubljeni`, ki sprejme slovar zaljubljenih in vrne
-# _množico_ tistih, ki so ljubljeni.
-# =============================================================================
-def ljubljeni(slovar):
-    srcki=set()
-    for oseba in slovar:
-        srcki = srcki.union(slovar[oseba])
-    return srcki
-# =====================================================================@001386=
-# 3. podnaloga
-# Sestavite funkcijo `pari`, ki sprejme slovar zaljubljenih in vrne _množico_
-# vseh parov, ki so srečno zaljubljeni. Vsak par naj se pojavi samo enkrat in
-# sicer tako, da sta zaljubljenca našteta po abecedi. Na primer, če sta Ana in
-# Bine zaljubljena, dodamo par `('Ana', 'Bine')`.
-# =============================================================================
-def pari(slovar):
-    srecnezi=set()
-    for oseba in slovar:
-        for srce in slovar[oseba]:
-            if oseba in slovar[srce]:
-                parcek= [oseba,srce]
-                parcek.sort()
-                srecnezi.add(tuple(parcek))
-    return srecnezi
 
-# =====================================================================@001387=
-# 4. podnaloga
-# Sestavite funkcijo `ustrezljivi(oseba, zaljubljeni)`, ki sprejme ime osebe
-# ter slovar zaljubljenih, vrne pa _množico_ vseh ljudi, ki so do dane osebe še
-# posebej ustrežljivi. Posebej ustrežljivi so seveda zato, ker so bodisi
-# zaljubljeni v dano osebo, bodisi so zaljubljeni v osebo, ki je posebej
-# ustrežljiva do nje, in tako naprej.
+# =====================================================================@024229=
+# 2. podnaloga
+# Sestavite funkcijo `premesaj(karte)`, ki seznam kart čim bolj naključno
+# premeša, ne vrne pa ničesar.
 # 
-# Na primer, če imamo slovar
-# 
-#     {
-#         'Ana': {'Bine', 'Cene'},
-#         'Bine': {'Ana'},
-#         'Cene': {'Bine'},
-#         'Davorka': {'Davorka'},
-#         'Eva': {'Bine'}
-#     }
-# 
-# so do Ceneta posebej ustrežljivi Ana (ki je zaljubljena vanj), Bine (ki je
-# zaljubljen v Ano) ter Cene in Eva (ki sta zaljubljena v Bineta).
+# Pomagate si lahko s funkcijo `shuffle` iz modula `random`.
 # =============================================================================
-def ustrezljivi(oseba, zaljubljeni):
-    prev={oseba}
-    rezultat=set()
-  
-    while prev != set():
-        dod=set()
-        for clovek in prev:
-            for lojze  in zaljubljeni:
-                if clovek in zaljubljeni[lojze] and lojze not in rezultat:
-                    dod.add(lojze)
-        prev=dod
-        rezultat.update(dod)
-    return rezultat
+
+# =====================================================================@024230=
+# 3. podnaloga
+# Predpostavimo, da igro *Poker* igra $n$ igralcev. Pri igri najprej karte
+# premešamo, nato pa vsakemu od igralcev podelimo dve karti. Sestavite funkcijo
+# `razdeli_karte(igralci, karte)`, ki sprejme karte in seznam imen igralcev,
+# vrne pa slovar, katerega ključi so imena igralcev, vrednost pri vsakem od njih
+# pa je seznam, ki vsebuje natanko dve karti.
+# 
+#     >>> karte = nov_kup()
+#     >>> premesaj(karte)
+#     >>> razdeli_karte(["Ana", "Bine", "Cene"], karte)
+#     {'Cene': [(13, 'srce'), (5, 'križ')], 'Bine': [(8, 'kara'), (3, 'kara')], 'Ana': [(9, 'srce'), (6, 'križ')]}
+# =============================================================================
+
+# =====================================================================@024231=
+# 4. podnaloga
+# Sestavite funkcijo `odpri_skupne_karte(karte)`, ki s seznama kart odstrani
+# vrhnjih pet kart in jih vrne kot seznam.
+# =============================================================================
+
+# =====================================================================@024232=
+# 5. podnaloga
+# Sestavite funkcijo `na_dva_dela(karte)`, ki sprejme seznam kart in vrne
+# dva seznama: prvi je seznam vseh številk, ki se pojavijo na danih kartah,
+# drugi pa seznam vseh barv, ki se pojavijo.
+# 
+#     >>> na_dva_dela([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])
+#     ([10, 12, 12, 10, 12], ['križ', 'srce', 'pik', 'kara', 'križ'])
+# =============================================================================
+
+# =====================================================================@024233=
+# 6. podnaloga
+# Sestavite funkcijo `tvorijo_lestvico(karte)`, ki sprejme seznam kart in vrne
+# `True`, če in samo če številke v kartah tvorijo lestvico.
+# 
+#     >>> tvorijo_lestvico([(10, 'križ'), (12, 'srce')])
+#     False
+#     >>> tvorijo_lestvico([(10, 'križ'), (12, 'srce'), (11, 'križ')])
+#     True
+# =============================================================================
+
+# =====================================================================@024234=
+# 7. podnaloga
+# Sestavite funkcijo `kolikokrat_se_pojavi_katera_stevilka(karte)`, ki sprejme seznam kart in vrne
+# slovar. Ključi v tem slovarju so številke, ki se pojavijo na kartah,
+# vrednosti pa števila pojavitev vsake od teh številk.
+# 
+#     >>> kolikokrat_se_pojavi_katera_stevilka([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])
+#     {10: 2, 12: 3}
+# =============================================================================
+
+# =====================================================================@024235=
+# 8. podnaloga
+# Sestavite funkcijo `vrednost(peterka)`, ki sprejme seznam petih kart in vrne
+# *kvaliteto kart* v skladu z naslednjo ocenjevalno shemo:
+# 
+#     9 Barvna lestvica
+#     8 Poker
+#     7 Full house
+#     6 Barve
+#     5 Lestvica
+#     4 Tris
+#     3 Dva para
+#     2 En par
+#     1 Visoka karta
+# 
+# Za razlago se obrnite na
+# [Wikipedijo](https://en.wikipedia.org/wiki/List_of_poker_hands).
+# 
+#     >>> vrednost([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])
+#     7
+# =============================================================================
+
+# =====================================================================@024236=
+# 9. podnaloga
+# Sestavite funkcijo `ovrednoti(karte)`, ki sprejme seznam kart (dolžine vsaj
+# pet) in vrne vrednost najboljše peterke v seznamu.
+# 
+# Pomagate si lahko s funkcijo `combinations` iz modula `itertools`.
+# =============================================================================
+
+# =====================================================================@024237=
+# 10. podnaloga
+# Sestavite funkcijo `poker(imena)`, ki ustvari nov kup kart, jih premeša, razdeli
+# $n$-tim igralcem in odpre še skupne karte. Funkcija naj izpiše skupne karte,
+# hkrati pa za vsakega igralca še njegovo ime, število točk in njegovi karti.
+# 
+#     >>> poker(["Ana", "Bine", "Cene"])
+#     [(4, 'kara'), (10, 'križ'), (12, 'srce'), (8, 'križ'), (12, 'pik')]
+#     Ana 3 [(13, 'križ'), (8, 'kara')]
+#     Bine 3 [(4, 'križ'), (2, 'srce')]
+#     Cene 7 [(10, 'kara'), (12, 'križ')]
+# =============================================================================
+
+
 
 
 
@@ -703,20 +733,13 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg0LCJ1c2VyIjoxMDY3Nn0:1tyvgN:oJqsNL2YXtwhDjwgwQMLKMPao7mMmdhi07bmw7N4zFg"
+        ] = "eyJwYXJ0IjoyNDIyOCwidXNlciI6MTA2NzZ9:1u1SqN:nnNkLAOWt1zJ1kLymxMN6ZJLUGyzJ5dRmC5h-qPNCu8"
         try:
-            Check.equal("""narcisoidi({'Ana' : {'Bine', 'Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})\n""", {'Davorka'})
-            Check.equal('narcisoidi({})', set())
-            Check.equal("narcisoidi({'Ana':{'Ana', 'Bine'}})", {'Ana'})
-            Check.secret(narcisoidi({'Ana' : {'Bine', 'Ana', 'Cene'},
-                                        'Bine' : set(),
-                                        'Cene' : {'Bine'},
-                                        'Davorka' : {'Davorka'},
-                                        'Eva' : {'Bine'}}))
+            for stevilka in range(2, 15):
+                for barva in ["srce", "kara", "pik", "križ"]:
+                    Check.equal("({}, '{}') in nov_kup()".format(stevilka, barva), True)
+            
+            Check.equal("len(nov_kup())", 52)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -728,20 +751,36 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg1LCJ1c2VyIjoxMDY3Nn0:1tyvgN:DV0s7Q0nlbOmAa8JDBrsao1F4gA8cbzChB7LmzYqgJg"
+        ] = "eyJwYXJ0IjoyNDIyOSwidXNlciI6MTA2NzZ9:1u1SqN:XGEqKqVvADALYXNetOJLHR051XVQ1ERI9UI-YV_ZWlI"
         try:
-            Check.equal("""ljubljeni({'Ana' : {'Bine','Cene'},
-                                      'Bine' : set(),
-                                      'Cene' : {'Bine'},
-                                      'Davorka' : {'Davorka'},
-                                      'Eva' : {'Bine'}})""",
-                        {'Bine', 'Davorka', 'Cene'})
-            Check.equal('ljubljeni({})', set())
-            Check.secret(ljubljeni({'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}}))
+            def check_premesaj(karte):
+                karte_input = karte[:]
+                found_permutation = False
+                for _ in range(50):
+                    karte_trenutno = karte[:]
+                    premesaj(karte)
+                    if not isinstance(karte, list) or len(karte_trenutno) != len(karte):
+                        Check.error(
+                            f"Klic premesaj({karte_trenutno})\nni zgolj premešal seznama. "
+                            f"Trenutno stanje kart: {karte}\n"
+                        )
+                        return False
+                    if karte_input != karte:
+                        found_permutation = True
+                if not found_permutation:
+                    Check.error(
+                        f"50 zaporednih klicev premesaj({karte_input})\nni premešalo kart. "
+                        f"Z veliko verjetnostjo trdimo, da je s funkcijo premesaj nekaj narobe."
+                    )
+            
+            
+            
+            cases = [
+                [(2, "srce"), (3, "srce"), (4, "srce"), (5, "srce")],
+                [(2, "kara"), (3, "pik"), (4, "srce"), (5, "srce")]
+            ]
+            for case in cases:
+                check_premesaj(case)
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -753,20 +792,36 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg2LCJ1c2VyIjoxMDY3Nn0:1tyvgN:Urg2mGks2rfcit1RDoB5QyGQvYU-CSamxo7CbzboLL0"
+        ] = "eyJwYXJ0IjoyNDIzMCwidXNlciI6MTA2NzZ9:1u1SqN:Pvnw4--tjoqyRPx4x3LvdwzVHyH-yoOBBoDdBdYYikE"
         try:
-            Check.equal("""pari({'Ana' : {'Bine','Cene'},
-                                 'Bine' : set(),
-                                 'Cene' : {'Bine', 'Ana'},
-                                 'Davorka' : {'Davorka'},
-                                 'Eva' : {'Bine'}})\n""",
-                        {('Ana', 'Cene'), ('Davorka', 'Davorka')})
-            Check.equal("pari({})", set())
-            Check.secret(pari({'Ana' : {'Bine'},
-                                  'Bine' : {'Eva', 'Davorka'},
-                                  'Cene' : {'Bine', 'Ana'},
-                                  'Davorka' : {'Bine'},
-                                  'Eva' : {'Bine'}}))
+            def check_razdeli_karte(igralci, karte):
+                odgovor = razdeli_karte(igralci, karte)
+                if type(odgovor) != dict:
+                    Check.error(f"razdeli_karte({igralci}, {karte})\nne vrne slovarja.")
+                    return False
+                if len(odgovor) != len(igralci):
+                    Check.error(
+                        f"Po klicu razdeli_karte({igralci}, {karte})\nje število igralcev s kartami {len(odgovor)}, "
+                        f"število igralcev je pa {len(igralci)}."
+                    )
+                    return False
+                if not all(len(karti) == 2 for karti in razdeli_karte(["Ana", "Bine", "Cene"], nov_kup()).values()):
+                    Check.error(f"Po klicu razdeli_karte({igralci}, {karte})\nnimajo vsi igralci dveh kart")
+                    return False
+                different_cards = len(
+                    set(karta for karti in razdeli_karte(["Ana", "Bine", "Cene"], nov_kup()).values() for karta in karti)
+                )
+                expected_different_cards = 2 * len(igralci)
+                if different_cards != 2 * len(igralci):
+                    Check.error(
+                        f"Po klicu razdeli_karte({igralci}, {karte})\n"
+                        f"se skupno število različnih kart ({different_cards}) "
+                        f"ne ujema s pričakovanim ({expected_different_cards})."
+                    )
+                return True
+            
+            
+            check_razdeli_karte(["Ana", "Bine", "Cene"], nov_kup())
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
@@ -778,24 +833,162 @@ def _validate_current_file():
     if Check.part():
         Check.current_part[
             "token"
-        ] = "eyJwYXJ0IjoxMzg3LCJ1c2VyIjoxMDY3Nn0:1tyvgN:3yhQBEmz-i92vIq_vDnk2MM4T__MwYJXoNmwUDvc4DM"
+        ] = "eyJwYXJ0IjoyNDIzMSwidXNlciI6MTA2NzZ9:1u1SqN:LQWRM4xJ2MYFd4xRaQkPweWVUF5s7QoE5X-4kwOht5E"
         try:
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : {'Ana'},
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana', 'Bine', 'Cene', 'Eva'})
-            Check.equal("ustrezljivi('Cene', {})", set())
-            Check.equal("""ustrezljivi('Cene', {'Ana' : {'Bine', 'Cene'},
-                                       'Bine' : set(),
-                                       'Cene' : {'Bine'},
-                                       'Davorka' : {'Davorka'},
-                                       'Eva' : {'Bine'}})\n""", {'Ana'})
-            Check.secret(sorted(ustrezljivi('Davorka', {'Ana' : {'Bine'},
-                                         'Bine' : {'Eva', 'Davorka'},
-                                         'Cene' : {'Bine', 'Ana'},
-                                         'Davorka' : {'Bine'},
-                                         'Eva' : {'Bine'}})))
+            cases = [
+                (
+                    [(2, "kara"), (3, "kara"), (4, "srce"), (6, "križ"), (8, "pik"), (10, "kara")],
+                    [(3, "kara"), (4, "srce"), (6, "križ"), (8, "pik"), (10, "kara")]
+                ),
+                (
+                    [(2, "kara"), (3, "kara"), (4, "srce"), (6, "križ"), (8, "pik")],
+                    [(2, "kara"), (3, "kara"), (4, "srce"), (6, "križ"), (8, "pik")],
+                )
+            ]
+            
+            def check_odpri_skupne_karte(karte, expected_output):
+                karte_input = karte[:]
+                answer = odpri_skupne_karte(karte)
+                if not isinstance(answer, list):
+                    Check.error(f"Klic odpri_skupne_karte({karte_input})\nmora vrniti seznam.")
+                    return False
+                answer = sorted(answer)
+                if answer != expected_output:
+                    Check.error(f"Klic odpri_skupne_karte({karte_input})\nmora vrniti (permutacijo) {expected_output}, "
+                                f"a vrne {answer}")
+                    return False
+                if len(karte_input) != len(answer) + len(karte):
+                    Check.error(f"Klic odpri_skupne_karte({karte_input})\nni odstranil kart z začetnega kupa.")
+                    return False
+                return True
+            
+            
+            for karte, cards_out in cases:
+                check_odpri_skupne_karte(karte, cards_out)
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
+            Check.error(
+                "Testi sprožijo izjemo\n  {0}",
+                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            )
+
+    if Check.part():
+        Check.current_part[
+            "token"
+        ] = "eyJwYXJ0IjoyNDIzMiwidXNlciI6MTA2NzZ9:1u1SqN:zyXANLWI1AVPb2K6aZLKs603zBSR9QW-kBDjqQFH4AA"
+        try:
+            Check.equal("na_dva_dela([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])",
+            ([10, 12, 12, 10, 12], ['križ', 'srce', 'pik', 'kara', 'križ']))
+            
+            Check.equal("na_dva_dela([(2, 'kara'), (4, 'kara'), (10, 'kara'), (3, 'pik'), (9, 'križ')])",
+            ([2, 4, 10, 3, 9], ['kara', 'kara', 'kara', 'pik', 'križ']))
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
+            Check.error(
+                "Testi sprožijo izjemo\n  {0}",
+                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            )
+
+    if Check.part():
+        Check.current_part[
+            "token"
+        ] = "eyJwYXJ0IjoyNDIzMywidXNlciI6MTA2NzZ9:1u1SqN:I9nSFsVLGPbAJnHTYxyPdixVzZhHBT677hG44ytLcSk"
+        try:
+            Check.equal("tvorijo_lestvico([(10, 'križ'), (12, 'srce')])", False)
+            Check.equal("tvorijo_lestvico([(10, 'križ'), (12, 'srce'), (11, 'križ')])", True)
+            Check.equal("tvorijo_lestvico([(10, 'križ'), (10, 'srce')])", False)
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
+            Check.error(
+                "Testi sprožijo izjemo\n  {0}",
+                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            )
+
+    if Check.part():
+        Check.current_part[
+            "token"
+        ] = "eyJwYXJ0IjoyNDIzNCwidXNlciI6MTA2NzZ9:1u1SqN:6UA5YlDMAd7RZHcSgFFR7MCKR_tOxiubbwhwrbFwc40"
+        try:
+            Check.equal("kolikokrat_se_pojavi_katera_stevilka([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])",
+            {10: 2, 12: 3})
+            
+            Check.equal("kolikokrat_se_pojavi_katera_stevilka([(2, 'kara'), (4, 'kara'), (10, 'kara'), (3, 'pik'), (9, 'križ')])",
+            {9: 1, 2: 1, 3: 1, 4: 1, 10: 1})
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
+            Check.error(
+                "Testi sprožijo izjemo\n  {0}",
+                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            )
+
+    if Check.part():
+        Check.current_part[
+            "token"
+        ] = "eyJwYXJ0IjoyNDIzNSwidXNlciI6MTA2NzZ9:1u1SqN:9kNC-bskvTi04X3zTmWY1eX_WqT4SVR5MilwOyEhBO8"
+        try:
+            Check.equal("vrednost([(10, 'križ'), (5, 'kara'), (4, 'križ'), (7, 'pik'), (11, 'pik')])", 1)
+            Check.equal("vrednost([(4, 'kara'), (2, 'križ'), (7, 'križ'), (7, 'kara'), (13, 'križ')])", 2)
+            Check.equal("vrednost([(5, 'pik'), (12, 'srce'), (13, 'kara'), (14, 'srce'), (5, 'srce')])", 2)
+            Check.equal("vrednost([(8, 'križ'), (9, 'kara'), (5, 'križ'), (8, 'pik'), (3, 'srce')])", 2)
+            Check.equal("vrednost([(11, 'kara'), (2, 'srce'), (2, 'pik'), (3, 'križ'), (4, 'pik')])", 2)
+            Check.equal("vrednost([(6, 'kara'), (10, 'pik'), (13, 'pik'), (12, 'pik'), (7, 'srce')])", 1)
+            Check.equal("vrednost([(9, 'pik'), (3, 'pik'), (10, 'srce'), (11, 'srce'), (2, 'kara')])", 1)
+            Check.equal("vrednost([(11, 'križ'), (14, 'kara'), (12, 'kara'), (14, 'pik'), (6, 'srce')])", 2)
+            Check.equal("vrednost([(9, 'srce'), (6, 'križ'), (6, 'pik'), (4, 'srce'), (13, 'srce')])", 2)
+            Check.equal("vrednost([(3, 'kara'), (8, 'srce'), (10, 'kara'), (8, 'kara'), (12, 'križ')])", 2)
+            Check.equal("vrednost([(14, 'križ'), (14, 'pik'), (14, 'kara'), (14, 'srce'), (13, 'križ')])", 8)
+            Check.equal("vrednost([(13, 'pik'), (13, 'kara'), (13, 'srce'), (12, 'križ'), (12, 'pik')])", 7)
+            Check.equal("vrednost([(12, 'kara'), (12, 'srce'), (11, 'križ'), (11, 'pik'), (11, 'kara')])", 7)
+            Check.equal("vrednost([(11, 'srce'), (10, 'križ'), (10, 'pik'), (10, 'kara'), (10, 'srce')])", 8)
+            Check.equal("vrednost([(9, 'križ'), (9, 'pik'), (9, 'kara'), (9, 'srce'), (8, 'križ')])", 8)
+            Check.equal("vrednost([(8, 'pik'), (8, 'kara'), (8, 'srce'), (7, 'križ'), (7, 'pik')])", 7)
+            Check.equal("vrednost([(7, 'kara'), (7, 'srce'), (6, 'križ'), (6, 'pik'), (6, 'kara')])", 7)
+            Check.equal("vrednost([(6, 'srce'), (5, 'križ'), (5, 'pik'), (5, 'kara'), (5, 'srce')])", 8)
+            Check.equal("vrednost([(4, 'križ'), (4, 'pik'), (4, 'kara'), (4, 'srce'), (3, 'križ')])", 8)
+            Check.equal("vrednost([(3, 'pik'), (3, 'kara'), (3, 'srce'), (2, 'križ'), (2, 'pik')])", 7)
+            Check.equal("vrednost([(4, 'pik'), (3, 'kara'), (2, 'srce'), (6, 'križ'), (5, 'pik')])", 5)
+            Check.equal("vrednost([(4, 'pik'), (3, 'pik'), (7, 'pik'), (6, 'pik'), (5, 'pik')])", 9)
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
+            Check.error(
+                "Testi sprožijo izjemo\n  {0}",
+                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            )
+
+    if Check.part():
+        Check.current_part[
+            "token"
+        ] = "eyJwYXJ0IjoyNDIzNiwidXNlciI6MTA2NzZ9:1u1SqN:A-hbglB4lGZXg1Tcw8ExztAmcZYbWDosHR1ZcalQ9E4"
+        try:
+            Check.equal("ovrednoti([(8, 'križ'), (10, 'srce'), (13, 'križ'), (7, 'pik'), (3, 'kara')])", 1)
+            Check.equal("ovrednoti([(6, 'pik'), (10, 'pik'), (8, 'križ'), (5, 'kara'), (14, 'pik'), (10, 'kara')])", 2)
+            Check.equal("ovrednoti([(14, 'kara'), (12, 'križ'), (10, 'kara'), (14, 'srce'), (5, 'kara'), (13, 'križ'), (8, 'srce')])", 2)
+            Check.equal("ovrednoti([(5, 'srce'), (5, 'kara'), (12, 'križ'), (5, 'pik'), (14, 'pik'), (4, 'pik'), (11, 'kara'), (14, 'srce')])", 7)
+            Check.equal("ovrednoti([(13, 'pik'), (5, 'kara'), (13, 'križ'), (3, 'križ'), (10, 'križ'), (14, 'pik'), (7, 'srce'), (5, 'srce'), (8, 'kara')])", 3)
+            Check.equal("ovrednoti([(3, 'križ'), (7, 'pik'), (2, 'pik'), (3, 'srce'), (5, 'kara'), (4, 'križ'), (4, 'pik'), (6, 'kara'), (12, 'pik'), (14, 'pik')])", 6)
+            Check.equal("ovrednoti([(2, 'križ'), (11, 'kara'), (14, 'srce'), (3, 'križ'), (6, 'križ'), (6, 'kara'), (5, 'križ'), (13, 'križ'), (4, 'križ'), (2, 'kara'), (12, 'križ')])", 9)
+            Check.equal("ovrednoti([(9, 'kara'), (2, 'pik'), (4, 'pik'), (8, 'kara'), (13, 'pik'), (9, 'križ'), (11, 'kara'), (13, 'srce'), (4, 'križ'), (9, 'srce'), (5, 'križ'), (10, 'križ')])", 7)
+            Check.equal("ovrednoti([(3, 'srce'), (11, 'kara'), (6, 'kara'), (6, 'križ'), (10, 'srce'), (5, 'križ'), (12, 'pik'), (7, 'kara'), (5, 'kara'), (3, 'kara'), (3, 'križ'), (6, 'pik'), (13, 'srce')])", 7)
+            Check.equal("ovrednoti([(13, 'srce'), (2, 'kara'), (10, 'pik'), (9, 'srce'), (14, 'srce'), (14, 'kara'), (6, 'kara'), (9, 'križ'), (14, 'križ'), (12, 'srce'), (11, 'srce'), (3, 'srce'), (12, 'križ'), (9, 'kara')])", 7)
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
+            Check.error(
+                "Testi sprožijo izjemo\n  {0}",
+                "\n  ".join(traceback.format_exc().split("\n"))[:-2],
+            )
+
+    if Check.part():
+        Check.current_part[
+            "token"
+        ] = "eyJwYXJ0IjoyNDIzNywidXNlciI6MTA2NzZ9:1u1SqN:jgy_7shSgcu8bhDVatSALf5PtkJxjHFMYpgCxOk8xxs"
+        try:
+            pass
         except TimeoutError:
             Check.error("Dovoljen čas izvajanja presežen")
         except Exception:
