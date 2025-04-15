@@ -13,6 +13,13 @@
 # na primer `(12, "pik")` predstavlja pikovo damo,
 # `(10, "križ")` pa križevo desetko.
 # =============================================================================
+def nov_kup():
+    kup=[]
+    vrste=["pik","križ","srce","kara"]
+    for i in range(2,15):
+        for vrsta in vrste:
+            kup.append((i,vrsta))
+    return kup
 
 # =====================================================================@024229=
 # 2. podnaloga

@@ -56,7 +56,20 @@ def stevilo_clenov(m):
 #     >>> najblizje(10, 20, 10000)
 #     14
 # =============================================================================
-
+def najblizje(a, b, m):
+    blizu=None
+    najmanjsi=0
+    for i in range(a,b+1):
+        n=i
+        vsota=0
+        while vsota<= m:
+            vsota+= i*(i+1)
+            i=i+1
+        blizje=min(vsota-m,m-vsota+i*(i-1))
+        if blizu==None or blizje<blizu:
+            blizu=blizje
+            najmanjsi=n
+    return najmanjsi
 
 
 

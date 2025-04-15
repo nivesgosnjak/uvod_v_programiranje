@@ -46,7 +46,15 @@
 # _Opomba_: Kot je za Python običajno, se stolpci in vrstice začnejo
 # številčiti pri 0.
 # =============================================================================
-
+def zivi(svet, i, j):
+    ziv=0
+    for n in range(max(i-1,0),min(len(svet[0])-1,i+1)+1):
+        for m in range(max(0,j-1),min(j+1,len(svet[0])-1)+1):
+            if svet[n][m]==True:
+                ziv +=1
+    if svet[i][j]==True:
+        ziv +=-1
+    return ziv
 # =====================================================================@027814=
 # 2. podnaloga
 # Napišite funkcijo `igra(svet)`, ki sestavi in vrne matriko, ki
@@ -63,7 +71,20 @@
 #      [False, False, False, False, False, False],
 #      [False, False, False, False, False, False]]
 # =============================================================================
-
+def igra(svet):
+    nov_svet=[]
+    for a in range(len(svet)):
+        vrstica=[]
+        for b in range(len(svet[0])):
+            vrstica.append(False)
+        nov_svet.append(vrstica)
+    for i in range(len(svet)):
+        for j in range(len(svet[0])):
+            if (zivi(svet,i,j)==2 or zivi(svet,i,j)==3) and (svet[i][j]==True):
+                nov_svet[i][j]=True
+            elif zivi(svet,i,j)==3 and svet[i][j]==False:
+                nov_svet[i][j]=True
+    return nov_svet
 # =====================================================================@027815=
 # 3. podnaloga
 # Napišite funkcijo `populacija(svet, n)`, ki naredi `n` korakov igre
@@ -96,7 +117,21 @@
 # _Nasvet_: Najprej napišite pomožno funkcijo, ki prešteje število živih
 # celic v matriki.
 # =============================================================================
-
+def zive_celice(svet):
+    zive=0
+    for i in range(len(svet)):
+        for j in range(len(svet[0])):
+            if svet[i][j]==True:
+                zive += 1
+    return zive
+def populacija(svet, n):
+    seznam=[zive_celice(svet)]
+    while n>0:
+        svet=igra(svet)
+        nove=zive_celice(svet)
+        seznam.append(nove)
+        n=n-1
+    return seznam
 
 
 

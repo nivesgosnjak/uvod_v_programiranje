@@ -23,7 +23,29 @@
 #     >>> cik_cak('Attack at dawn!')
 #     ('A...C...D...', '.T.A.K.T.A.N', '..T...A...W.')
 # =============================================================================
-
+def cik_cak(geslo):
+    geslo= geslo.upper()
+    znakles=""
+    for znak in geslo:
+        if znak in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            znakles=znakles+znak
+    prva=""
+    druga=""
+    tretja=""
+    for i in range(len(znakles)):
+        if i%4==0:
+            prva+= znakles[i]
+            druga +="."
+            tretja += "."
+        elif i%2==1:
+            prva += "."
+            druga += znakles[i]
+            tretja += "."
+        else:
+            prva += "."
+            druga +="."
+            tretja += znakles[i]
+    return prva, druga, tretja
 # =====================================================================@001493=
 # 2. podnaloga
 # Zašifrirano besedilo dobi tako, da najprej prepiše vse znake iz prve
@@ -35,6 +57,14 @@
 #     >>> cik_cak_sifra('Attack at dawn!')
 #     'ACDTAKTANTAW'
 # =============================================================================
+def cik_cak_sifra(geslo):
+    cikcak=cik_cak(geslo)
+    sifra=""
+    for niz in cikcak:
+        for znak in niz:
+            if znak != ".":
+                sifra += znak
+    return sifra
 
 # =====================================================================@001494=
 # 3. podnaloga
@@ -62,6 +92,8 @@
 #     >>> razrez('   Kakšen\t pastir, \n\ntakšna  čreda. ')
 #     ['Kakšen', 'pastir,', 'takšna', 'čreda.']
 # =============================================================================
+
+    
 
 # =====================================================================@001495=
 # 4. podnaloga
