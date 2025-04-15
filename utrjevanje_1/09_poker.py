@@ -28,7 +28,9 @@ def nov_kup():
 # 
 # Pomagate si lahko s funkcijo `shuffle` iz modula `random`.
 # =============================================================================
-
+import random
+def premesaj(karte):
+    random.shuffle(karte)
 # =====================================================================@024230=
 # 3. podnaloga
 # Predpostavimo, da igro *Poker* igra $n$ igralcev. Pri igri najprej karte
@@ -42,13 +44,24 @@ def nov_kup():
 #     >>> razdeli_karte(["Ana", "Bine", "Cene"], karte)
 #     {'Cene': [(13, 'srce'), (5, 'križ')], 'Bine': [(8, 'kara'), (3, 'kara')], 'Ana': [(9, 'srce'), (6, 'križ')]}
 # =============================================================================
-
+def razdeli_karte(igralci, karte):
+    konec={}
+    for i in range(len(igralci)):
+        konec[igralci[i]]=[karte[2*i],karte[2*i +1]]
+    return konec
 # =====================================================================@024231=
 # 4. podnaloga
 # Sestavite funkcijo `odpri_skupne_karte(karte)`, ki s seznama kart odstrani
 # vrhnjih pet kart in jih vrne kot seznam.
 # =============================================================================
-
+def odpri_skupne_karte(karte):
+    vrhnje=[]
+    a=len(karte)
+    for i in range(5):
+        vrhnje.append(karte[a-1-i])
+    for i in range(5):
+        karte.pop()
+    return vrhnje
 # =====================================================================@024232=
 # 5. podnaloga
 # Sestavite funkcijo `na_dva_dela(karte)`, ki sprejme seznam kart in vrne
@@ -58,7 +71,13 @@ def nov_kup():
 #     >>> na_dva_dela([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])
 #     ([10, 12, 12, 10, 12], ['križ', 'srce', 'pik', 'kara', 'križ'])
 # =============================================================================
-
+def na_dva_dela(karte):
+    stevilke=[]
+    vrste=[]
+    for i in range(len(karte)):
+        stevilke.append(karte[i][0])
+        vrste.append(karte[i][1])
+    return stevilke, vrste
 # =====================================================================@024233=
 # 6. podnaloga
 # Sestavite funkcijo `tvorijo_lestvico(karte)`, ki sprejme seznam kart in vrne
@@ -69,7 +88,14 @@ def nov_kup():
 #     >>> tvorijo_lestvico([(10, 'križ'), (12, 'srce'), (11, 'križ')])
 #     True
 # =============================================================================
-
+def tvorijo_lestvico(karte):
+    stevilke=na_dva_dela(karte)[0]
+    for i in range(min(stevilke),max(stevilke)+1):
+        if i not in stevilke:
+            return False
+    if min(stevilke)==max(stevilke) and len(stevilke)>1:
+        return False
+    return True
 # =====================================================================@024234=
 # 7. podnaloga
 # Sestavite funkcijo `kolikokrat_se_pojavi_katera_stevilka(karte)`, ki sprejme seznam kart in vrne
@@ -79,7 +105,15 @@ def nov_kup():
 #     >>> kolikokrat_se_pojavi_katera_stevilka([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])
 #     {10: 2, 12: 3}
 # =============================================================================
-
+def kolikokrat_se_pojavi_katera_stevilka(karte):
+    slovar={}
+    stevilke=na_dva_dela(karte)[0]
+    porabljene=[]
+    for stevilka in stevilke:
+        if stevilka not in porabljene:
+            porabljene.append(stevilka)
+            slovar[stevilka]=stevilke.count(stevilka)
+    return slovar
 # =====================================================================@024235=
 # 8. podnaloga
 # Sestavite funkcijo `vrednost(peterka)`, ki sprejme seznam petih kart in vrne
