@@ -135,7 +135,30 @@ def kolikokrat_se_pojavi_katera_stevilka(karte):
 #     >>> vrednost([(10, 'križ'), (12, 'srce'), (12, 'pik'), (10, 'kara'), (12, 'križ')])
 #     7
 # =============================================================================
-
+def vrednost(peterka):
+    stevilke,barve=na_dva_dela(peterka)
+    slovar=kolikokrat_se_pojavi_katera_stevilka(peterka)
+    if tvorijo_lestvico(peterka)==True and len(set(stevilke))==5:
+        if len(set(barve))==1:
+            return 9
+        else:
+            return 5
+    if len(set(barve))==1:
+        return 6
+    vrednosti=slovar.values()
+    if 4 in vrednosti:
+        return 8
+    if 3 in vrednosti and 2 in vrednosti:
+        return 7
+    if 3 in vrednosti:
+        return 4
+    if vrednosti==[2,2]:
+        return 3
+    if 2 in vrednosti:
+        return 2
+    return 1
+        
+        
 # =====================================================================@024236=
 # 9. podnaloga
 # Sestavite funkcijo `ovrednoti(karte)`, ki sprejme seznam kart (dolžine vsaj

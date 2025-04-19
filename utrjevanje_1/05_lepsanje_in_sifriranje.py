@@ -92,7 +92,19 @@ def cik_cak_sifra(geslo):
 #     >>> razrez('   Kakšen\t pastir, \n\ntakšna  čreda. ')
 #     ['Kakšen', 'pastir,', 'takšna', 'čreda.']
 # =============================================================================
-
+def razrez(niz):
+    besede=[]
+    beseda=""
+    for znak in niz:
+        if znak in " \n\t":
+            if len(beseda) > 0:
+                besede.append(beseda)
+                beseda=""
+        else:
+            beseda += znak
+    if len(beseda)>0:
+        besede.append(beseda)
+    return besede
     
 
 # =====================================================================@001495=
@@ -123,6 +135,24 @@ def cik_cak_sifra(geslo):
 #     temno, žita ne bo.
 # =============================================================================
 
+def olepsanoBesedilo(niz, n):
+    besede=razrez(niz)
+    besedilo=""
+    vrstice=[]
+    vrsta=""
+    for beseda in besede:
+        if len(beseda) + len(vrsta) <=n:
+            vrsta += " " + beseda
+        else:
+            vrstice.append(vrsta[1:])
+            vrsta=" " + beseda
+    if len(vrsta)>1:
+        vrstice.append(vrsta[1:])
+    for vrsta in vrstice:
+        besedilo+= vrsta +"\n"
+    return besedilo[:-1]
+
+        
 
 
 
